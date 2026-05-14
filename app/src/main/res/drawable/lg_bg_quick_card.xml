@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Neumorphic quick card with ripple-ready foreground -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Soft outer shadow -->
+    <item android:top="2dp" android:left="2dp" android:right="-2dp" android:bottom="-2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#18000030" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+    <!-- Main white card surface -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FAFBFF" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+    <!-- Top inner gloss -->
+    <item android:bottom="30dp">
+        <shape android:shape="rectangle">
+            <gradient android:type="linear" android:angle="270"
+                android:startColor="#50FFFFFF" android:endColor="#00FFFFFF" />
+            <corners android:topLeftRadius="20dp" android:topRightRadius="20dp"
+                android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp" />
+        </shape>
+    </item>
+</layer-list>

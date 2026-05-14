@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Liquid Glass: staggered item entrance — fade + rise from below -->
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/decelerate_cubic">
+
+    <translate
+        android:fromYDelta="28dp"
+        android:toYDelta="0dp"
+        android:duration="320" />
+
+    <alpha
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:duration="280" />
+
+</set>

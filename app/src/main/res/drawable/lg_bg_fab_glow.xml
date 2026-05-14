@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ambient glow behind the FAB — matches pink-to-blue gradient -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:type="radial"
+        android:startColor="#60A78BFA"
+        android:centerColor="#30D946EF"
+        android:endColor="#00818CF8"
+        android:gradientRadius="32dp" />
+</shape>

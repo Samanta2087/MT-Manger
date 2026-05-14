@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Toolbar Button Toggled State — purple tinted glass -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Bottom depth shadow (purple tinted) -->
+    <item
+        android:top="3dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#208A5CF6" />
+            <corners android:radius="14dp" />
+        </shape>
+    </item>
+
+    <!-- Main surface: soft purple tint -->
+    <item android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:startColor="#E8D5F5"
+                android:endColor="#DDD6FE"
+                android:angle="270" />
+            <corners android:radius="14dp" />
+            <stroke
+                android:width="0.8dp"
+                android:color="#80A78BFA" />
+        </shape>
+    </item>
+
+    <!-- Top highlight -->
+    <item
+        android:bottom="24dp"
+        android:left="4dp"
+        android:right="10dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:startColor="#50FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+            <corners
+                android:topLeftRadius="12dp"
+                android:topRightRadius="2dp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp" />
+        </shape>
+    </item>
+
+</layer-list>

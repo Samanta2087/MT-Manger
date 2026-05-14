@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- ── ExoPlayer video surface (fills screen) ── -->
+    <androidx.media3.ui.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:use_controller="false"
+        app:resize_mode="fit" />
+
+    <!-- ── Buffering spinner ── -->
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:indeterminateTint="#00C3FF"
+        android:visibility="visible" />
+
+    <!-- ── Audio-only fallback ── -->
+    <LinearLayout
+        android:id="@+id/audioArt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎵"
+            android:textSize="90sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Audio File"
+            android:textColor="#AAFFFFFF"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- ── Double-tap seek hint ── -->
+    <TextView
+        android:id="@+id/tvSkipHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#99000000"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:visibility="gone" />
+
+    <!-- ── Top bar: back + title ── -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp"
+        android:paddingEnd="12dp"
+        android:background="#BB000000"
+        android:layout_gravity="top">
+
+        <ImageButton
+            android:id="@+id/btnVideoBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="#FFFFFF"
+            android:contentDescription="Back" />
+
+        <TextView
+            android:id="@+id/tvVideoTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:textColor="#EEEEEE"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <!-- ── Bottom controls bar ── -->
+    <LinearLayout
+        android:id="@+id/controlsBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#BB000000"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"
+        android:layout_gravity="bottom">
+
+        <!-- SeekBar row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="6dp">
+
+            <TextView
+                android:id="@+id/tvCurrent"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:text="0:00"
+                android:textColor="#DDFFFFFF"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:progressTint="#00C3FF"
+                android:thumbTint="#00C3FF" />
+
+            <TextView
+                android:id="@+id/tvDuration"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:text="0:00"
+                android:textColor="#DDFFFFFF"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="end" />
+        </LinearLayout>
+
+        <!-- Playback buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageButton
+                android:id="@+id/btnRewind"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_media_rew"
+                android:tint="#FFFFFF"
+                android:contentDescription="-10s" />
+
+            <ImageButton
+                android:id="@+id/btnPlayPause"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/bg_play_button"
+                android:src="@android:drawable/ic_media_pause"
+                android:tint="#FFFFFF"
+                android:contentDescription="Play/Pause"
+                android:padding="18dp" />
+
+            <ImageButton
+                android:id="@+id/btnFastForward"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_media_ff"
+                android:tint="#FFFFFF"
+                android:contentDescription="+10s" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outermost purple glow spread (thick stroke trick) -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000"/>
+            <corners android:radius="54dp"/>
+            <stroke android:width="18dp" android:color="#33A855F7"/>
+        </shape>
+    </item>
+
+    <!-- Mid purple glow -->
+    <item android:left="8dp" android:top="8dp" android:right="8dp" android:bottom="8dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000"/>
+            <corners android:radius="48dp"/>
+            <stroke android:width="10dp" android:color="#44A855F7"/>
+        </shape>
+    </item>
+
+    <!-- Blue glow ring on the inside -->
+    <item android:left="14dp" android:top="14dp" android:right="14dp" android:bottom="14dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000"/>
+            <corners android:radius="42dp"/>
+            <stroke android:width="6dp" android:color="#554F8EF7"/>
+        </shape>
+    </item>
+
+    <!-- Bright neon border line -->
+    <item android:left="18dp" android:top="18dp" android:right="18dp" android:bottom="18dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#00000000"/>
+            <corners android:radius="38dp"/>
+            <stroke android:width="2dp" android:color="#CC9B6DFF"/>
+        </shape>
+    </item>
+
+    <!-- Dark glossy card body -->
+    <item android:left="20dp" android:top="20dp" android:right="20dp" android:bottom="20dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="145"
+                android:startColor="#F2050D1C"
+                android:endColor="#F20A1430"/>
+            <corners android:radius="36dp"/>
+        </shape>
+    </item>
+
+    <!-- Top-left glossy highlight -->
+    <item android:left="20dp" android:top="20dp" android:right="20dp" android:bottom="140dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#28FFFFFF"
+                android:endColor="#00FFFFFF"/>
+            <corners android:topLeftRadius="36dp" android:topRightRadius="36dp"
+                android:bottomLeftRadius="0dp" android:bottomRightRadius="0dp"/>
+        </shape>
+    </item>
+
+</layer-list>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clear sort metaphor: up ↑ and down ↓ arrows -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Up arrow -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M7,3L4,7h2.5v6h1V7H10L7,3Z"/>
+    <!-- Down arrow -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M17,21l3,-4h-2.5v-6h-1v6H14l3,4Z"/>
+</vector>

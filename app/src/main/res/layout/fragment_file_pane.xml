@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:minHeight="350dp"
+    android:background="@android:color/transparent">
+
+
+    <LinearLayout
+        android:id="@+id/statsPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="6dp">
+
+        <!-- Stats Cards row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Folders Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="?attr/xyvionBgGlassCard"
+                android:paddingStart="8dp"
+                android:paddingEnd="4dp"
+                android:gravity="center_vertical"
+                android:layout_marginEnd="3dp">
+
+                <FrameLayout
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_folder_container"
+                    android:layout_marginEnd="8dp">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_folder_flat"
+                        android:tint="@color/file_folder" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Folders"
+                        android:textColor="?attr/xyvionTextMuted"
+                        android:textSize="8sp" />
+                    <TextView
+                        android:id="@+id/tvFolderCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="?attr/xyvionTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Files Card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="?attr/xyvionBgGlassCard"
+                android:paddingStart="8dp"
+                android:paddingEnd="4dp"
+                android:gravity="center_vertical"
+                android:layout_marginStart="3dp">
+
+                <FrameLayout
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_icon_container"
+                    android:layout_marginEnd="8dp">
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_file_flat"
+                        android:tint="@color/text_badge_py" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Files"
+                        android:textColor="?attr/xyvionTextMuted"
+                        android:textSize="8sp" />
+                    <TextView
+                        android:id="@+id/tvFileCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="?attr/xyvionTextPrimary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Search bar (hidden by default) -->
+    <LinearLayout
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="?attr/xyvionBgElevated"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_search"
+            android:tint="?attr/xyvionTextSecondary" />
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:hint="Filter files..."
+            android:textColorHint="@color/text_muted"
+            android:textColor="?attr/xyvionTextPrimary"
+            android:textSize="13sp"
+            android:paddingStart="8dp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:singleLine="true" />
+
+        <ImageButton
+            android:id="@+id/btnCloseSearch"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            android:tint="?attr/xyvionTextSecondary"
+            android:contentDescription="Close search" />
+    </LinearLayout>
+
+    <!-- Thin separator above file list -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/xyvionBgBorder" />
+
+    <!-- File List with SwipeRefresh -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fileListRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:clipToPadding="false"
+            android:paddingBottom="4dp" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/emptyState"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&#x1F4C2;"
+            android:textSize="48sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_folder"
+            android:textColor="?attr/xyvionTextMuted"
+            android:textSize="14sp"
+            android:paddingTop="8dp" />
+
+    </LinearLayout>
+
+    <!-- Selection Action Bar (shown during multi-select) -->
+    <LinearLayout
+        android:id="@+id/selectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/accent_blue_dim"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/btnCopy"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_copy"
+            android:tint="@color/text_primary"
+            android:contentDescription="Copy" />
+
+        <ImageButton
+            android:id="@+id/btnCut"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_cut"
+            android:tint="@color/text_primary"
+            android:contentDescription="Cut" />
+
+        <ImageButton
+            android:id="@+id/btnMove"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_move"
+            android:tint="#10B981"
+            android:contentDescription="Move to…" />
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/accent_red"
+            android:contentDescription="Delete" />
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_share"
+            android:tint="@color/text_primary"
+            android:contentDescription="Share" />
+
+        <ImageButton
+            android:id="@+id/btnRename"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/text_primary"
+            android:contentDescription="Rename" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tvSelectedCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp"
+            android:layout_marginEnd="12dp" />
+
+        <ImageButton
+            android:id="@+id/btnSelectAll"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_select_all"
+            android:tint="@color/text_primary"
+            android:contentDescription="Select all" />
+
+        <ImageButton
+            android:id="@+id/btnCancelSelect"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            android:tint="@color/text_primary"
+            android:contentDescription="Cancel selection" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Circular icon -->
+    <FrameLayout
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/bg_menu_icon">
+        <ImageView
+            android:id="@+id/ivActionIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <!-- Label -->
+    <TextView
+        android:id="@+id/tvActionLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Optional right badge -->
+    <TextView
+        android:id="@+id/tvActionBadge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/accent_blue"
+        android:textSize="11sp"
+        android:visibility="gone" />
+
+</LinearLayout>

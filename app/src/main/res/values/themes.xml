@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MTManagerLite" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorPrimaryVariant">@color/accent_blue_dim</item>
+        <item name="colorOnPrimary">@color/text_on_accent</item>
+        <item name="colorSecondary">@color/accent_cyan</item>
+        <item name="colorOnSecondary">@color/bg_primary</item>
+        <item name="colorSurface">@color/bg_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:colorBackground">@color/bg_primary</item>
+        <item name="colorError">@color/accent_red</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:navigationBarColor">@color/nav_bar_color</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <!-- Smooth window transition -->
+        <item name="android:windowAnimationStyle">@style/WindowFadeAnimation</item>
+        <!-- ── XYvion switchable attrs (dark defaults) ── -->
+        <item name="xyvionBgMain">@drawable/bg_main</item>
+        <item name="xyvionBgGlassCard">@drawable/bg_glass_card</item>
+        <item name="xyvionBgHeader">@color/bg_surface</item>
+        <item name="xyvionBgBottomBar">@drawable/bg_glass_card</item>
+        <item name="xyvionBgFab">@drawable/bg_fab_glow</item>
+        <item name="xyvionBgPane">@color/bg_primary</item>
+        <item name="xyvionBgElevated">@color/bg_elevated</item>
+        <item name="xyvionBgBorder">@color/border_default</item>
+        <item name="xyvionTextPrimary">@color/text_primary</item>
+        <item name="xyvionTextSecondary">@color/text_secondary</item>
+        <item name="xyvionTextMuted">@color/text_muted</item>
+        <item name="xyvionBgItemRow">@android:color/transparent</item>
+        <item name="xyvionBgHeaderBtn">@android:color/transparent</item>
+        <item name="xyvionBgIconContainer">@drawable/bg_icon_container</item>
+        <item name="xyvionBgChevron">@android:color/transparent</item>
+        <item name="xyvionChevronVisible">false</item>
+        <!-- Nav bar pills (dark: dark elevated surface) -->
+        <item name="xyvionBgNavPill">@drawable/bg_nav_pill_dark</item>
+        <item name="xyvionNavIconTint">@color/text_secondary</item>
+        <item name="xyvionBgQuickCard">@drawable/bg_quick_card</item>
+    </style>
+
+    <style name="WindowFadeAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:background">@color/bg_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorSurface">@color/bg_card</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:windowTitleStyle">@style/AlertDialogTitle</item>
+    </style>
+
+    <style name="AlertDialogTitle">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ToolbarStyle" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/bg_surface</item>
+        <item name="titleTextColor">@color/text_primary</item>
+        <item name="subtitleTextColor">@color/text_secondary</item>
+    </style>
+
+    <style name="TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="android:background">@color/bg_surface</item>
+        <item name="tabTextColor">@color/text_secondary</item>
+        <item name="tabSelectedTextColor">@color/accent_blue</item>
+        <item name="tabIndicatorColor">@color/accent_blue</item>
+        <item name="tabIndicatorHeight">2dp</item>
+    </style>
+
+    <style name="BottomBarButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">9sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="chipBackgroundColor">@color/bg_card</item>
+        <item name="chipStrokeColor">@color/border_accent</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">12dp</item>
+    </style>
+
+    <!-- Popup/Dropdown Menu Styling -->
+    <style name="PopupMenuStyle" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@color/bg_surface</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <!-- Bottom Sheet for File Context Menu -->
+    <style name="FileMenuBottomSheet" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/bg_card</item>
+        <item name="colorSurface">@color/bg_card</item>
+        <item name="bottomSheetStyle">@style/FileMenuBottomSheetStyle</item>
+    </style>
+
+    <style name="FileMenuBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <!-- ══════════════════════════════════════════════════
+         THEME: Liquid Glass Light (XYvion Premium)
+         Ultra-premium frosted glass, neumorphism, VisionOS
+         ══════════════════════════════════════════════════ -->
+    <style name="Theme.XYvion.LiquidGlass" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/lg_accent_blue</item>
+        <item name="colorPrimaryVariant">@color/lg_accent_blue_dim</item>
+        <item name="colorOnPrimary">@color/lg_text_on_accent</item>
+        <item name="colorSecondary">@color/lg_accent_cyan</item>
+        <item name="colorOnSecondary">@color/lg_text_primary</item>
+        <item name="colorSurface">@color/lg_bg_surface</item>
+        <item name="colorOnSurface">@color/lg_text_primary</item>
+        <item name="android:colorBackground">@color/lg_bg_primary</item>
+        <item name="colorError">@color/lg_accent_red</item>
+        <item name="android:statusBarColor">@color/lg_status_bar</item>
+        <item name="android:navigationBarColor">@color/lg_nav_bar</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="materialAlertDialogTheme">@style/LiquidGlass.AlertDialogTheme</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:windowAnimationStyle">@style/WindowFadeAnimation</item>
+        <item name="bottomSheetDialogTheme">@style/LiquidGlass.BottomSheetDialog</item>
+        <!-- ── XYvion switchable attrs (light glass) ── -->
+        <item name="xyvionBgMain">@drawable/lg_bg_main</item>
+        <item name="xyvionBgGlassCard">@drawable/lg_bg_glass_card</item>
+        <item name="xyvionBgHeader">@color/lg_bg_surface</item>
+        <item name="xyvionBgBottomBar">@drawable/lg_bg_bottom_bar</item>
+        <item name="xyvionBgFab">@drawable/lg_bg_fab_glow</item>
+        <item name="xyvionBgPane">@color/lg_bg_primary</item>
+        <item name="xyvionBgElevated">@color/lg_bg_elevated</item>
+        <item name="xyvionBgBorder">@color/lg_border_outer</item>
+        <item name="xyvionTextPrimary">@color/lg_text_primary</item>
+        <item name="xyvionTextSecondary">@color/lg_text_secondary</item>
+        <item name="xyvionTextMuted">@color/lg_text_muted</item>
+        <item name="xyvionBgItemRow">@drawable/lg_bg_item_row</item>
+        <item name="xyvionBgHeaderBtn">@drawable/lg_bg_header_btn</item>
+        <item name="xyvionBgIconContainer">@drawable/lg_bg_glass_card</item>
+        <item name="xyvionBgChevron">@drawable/lg_bg_chevron_circle</item>
+        <item name="xyvionChevronVisible">true</item>
+        <!-- Nav bar pills (light: white neumorphic) -->
+        <item name="xyvionBgNavPill">@drawable/lg_bg_nav_pill</item>
+        <item name="xyvionNavIconTint">@color/lg_text_secondary</item>
+        <item name="xyvionBgQuickCard">@drawable/lg_bg_quick_card</item>
+    </style>
+
+    <style name="LiquidGlass.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:background">@color/lg_bg_surface</item>
+        <item name="colorOnSurface">@color/lg_text_primary</item>
+        <item name="colorPrimary">@color/lg_accent_blue</item>
+        <item name="colorSurface">@color/lg_bg_card</item>
+        <item name="android:textColorPrimary">@color/lg_text_primary</item>
+        <item name="android:textColorSecondary">@color/lg_text_secondary</item>
+        <item name="android:windowTitleStyle">@style/AlertDialogTitle</item>
+    </style>
+
+    <style name="LiquidGlass.BottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/lg_nav_bar</item>
+        <item name="colorSurface">@color/lg_bg_card</item>
+        <item name="bottomSheetStyle">@style/LiquidGlass.BottomSheetStyle</item>
+    </style>
+
+    <style name="LiquidGlass.BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">@drawable/lg_bg_bottom_sheet</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+</resources>

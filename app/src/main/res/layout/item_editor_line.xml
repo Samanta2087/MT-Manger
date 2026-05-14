@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:minHeight="22dp"
+    android:background="#1E1E1E">
+
+    <!-- Line number gutter -->
+    <TextView
+        android:id="@+id/tvLineNum"
+        android:layout_width="52dp"
+        android:layout_height="match_parent"
+        android:background="#1E1E1E"
+        android:textColor="#5A5A5A"
+        android:textSize="11sp"
+        android:fontFamily="monospace"
+        android:gravity="end|top"
+        android:paddingStart="6dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="3dp"
+        android:includeFontPadding="false" />
+
+    <!-- Gutter separator -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#333333" />
+
+    <!-- Active line indicator -->
+    <View
+        android:id="@+id/activeLineHighlight"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="#569CD6"
+        android:visibility="gone" />
+
+    <!-- Editor line -->
+    <com.mtmanager.lite.ui.editor.SelectionEditText
+        android:id="@+id/etLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1E1E1E"
+        android:textColor="#D4D4D4"
+        android:textSize="13.5sp"
+        android:fontFamily="@font/jetbrains_mono"
+        android:paddingStart="12dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="1dp"
+        android:singleLine="false"
+        android:scrollHorizontally="false"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:imeOptions="actionNone|flagNoEnterAction"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="3dp"
+        android:lineSpacingMultiplier="1.0"
+        android:overScrollMode="never"
+        android:gravity="top|start" />
+
+</LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Full-bleed background — the logo already has its own gradient background -->
+    <background android:drawable="@drawable/ic_launcher_new"/>
+    <foreground android:drawable="@drawable/ic_launcher_new"/>
+</adaptive-icon>

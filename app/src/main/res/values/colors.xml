@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        LIGHT THEME BASE COLORS
+        These values are used by BOTH themes via @color/ references in layouts.
+        Dark theme overrides are in values-night/colors.xml.
+        The Light Glass theme (Theme.XYvion.LiquidGlass) uses these light values.
+    -->
+
+    <!-- Backgrounds (light) -->
+    <color name="bg_primary">#F0F4FF</color>
+    <color name="bg_surface">#F8FAFF</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="bg_elevated">#EAEDFF</color>
+    <color name="bg_gradient_start">#EEF2FF</color>
+    <color name="bg_gradient_end">#F5F0FF</color>
+    <color name="bg_card_glass">#CCFFFFFF</color>
+    <color name="icon_container_bg">#E8F0FE</color>
+    <color name="folder_container_bg">#4A7CF7</color>
+
+    <!-- Text (light — dark text on light backgrounds) -->
+    <color name="text_primary">#1A1A2E</color>
+    <color name="text_secondary">#5A6A8A</color>
+    <color name="text_muted">#8896B3</color>
+    <color name="text_link">#4A7CF7</color>
+    <color name="text_on_accent">#FFFFFF</color>
+
+    <!-- Accent (shared) -->
+    <color name="accent_blue">#4A7CF7</color>
+    <color name="accent_blue_dim">#C5D6FD</color>
+    <color name="accent_glow">#664A7CF7</color>
+    <color name="accent_cyan">#00BCD4</color>
+    <color name="accent_red">#EF4444</color>
+    <color name="accent_green">#10B981</color>
+    <color name="accent_orange">#F97316</color>
+
+    <!-- Borders (light) -->
+    <color name="border_default">#22000060</color>
+    <color name="border_muted">#15000060</color>
+    <color name="border_accent">#664A7CF7</color>
+
+    <!-- System bars (light) -->
+    <color name="status_bar_color">#EEF2FF</color>
+    <color name="nav_bar_color">#F0F4FF</color>
+
+    <!-- File icons (light) -->
+    <color name="file_folder">#4A7CF7</color>
+    <color name="file_default">#5A6A8A</color>
+    <color name="file_enc">#F97316</color>
+
+    <!-- Pane states (light) -->
+    <color name="pane_inactive_border">#1A000080</color>
+    <color name="pane_active_border">#CC4A7CF7</color>
+    <color name="item_selected_bg">#334A7CF7</color>
+
+    <!-- Badge backgrounds (light) -->
+    <color name="bg_badge_bak">#E2E8F0</color>
+    <color name="bg_badge_py">#DBEAFE</color>
+    <color name="bg_badge_txt">#D1FAE5</color>
+    <color name="bg_badge_enc">#FEE2E2</color>
+
+    <!-- Badge text (light — readable on light backgrounds) -->
+    <color name="text_badge_bak">#475569</color>
+    <color name="text_badge_py">#1D4ED8</color>
+    <color name="text_badge_txt">#065F46</color>
+    <color name="text_badge_enc">#B91C1C</color>
+    <color name="text_badge_zip">#92400E</color>
+    <color name="text_badge_mp4">#9D174D</color>
+    <color name="text_badge_mp3">#9F1239</color>
+    <color name="text_badge_jpg">#9A3412</color>
+    <color name="text_badge_db">#5B21B6</color>
+    <color name="text_badge_json">#064E3B</color>
+    <color name="text_badge_pdf">#991B1B</color>
+    <color name="text_badge_csv">#1E40AF</color>
+
+    <!-- Editor-specific colors (light) -->
+    <color name="editor_line_number">#B0BEC5</color>
+    <color name="editor_line_number_bg">#F5F7FA</color>
+    <color name="editor_active_line">#E8F0FE</color>
+    <color name="editor_line_separator">#E0E0E0</color>
+    <color name="editor_status_bg">#F0F4FF</color>
+</resources>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- NIGHT/DARK overrides — VSCode-style professional dark theme -->
+
+    <!-- Backgrounds (dark — VSCode-inspired) -->
+    <color name="bg_primary">#121212</color>
+    <color name="bg_surface">#1E1E1E</color>
+    <color name="bg_card">#252526</color>
+    <color name="bg_elevated">#2D2D30</color>
+    <color name="bg_gradient_start">#121212</color>
+    <color name="bg_gradient_end">#1A1A1A</color>
+    <color name="bg_card_glass">#CC252526</color>
+    <color name="icon_container_bg">#2D2D30</color>
+    <color name="folder_container_bg">#3B82F6</color>
+
+    <!-- Text (dark) -->
+    <color name="text_primary">#D4D4D4</color>
+    <color name="text_secondary">#9CDCFE</color>
+    <color name="text_muted">#858585</color>
+    <color name="text_link">#569CD6</color>
+    <color name="text_on_accent">#FFFFFF</color>
+
+    <!-- Accent (dark) -->
+    <color name="accent_blue">#569CD6</color>
+    <color name="accent_blue_dim">#1D2D44</color>
+    <color name="accent_glow">#4D569CD6</color>
+    <color name="accent_cyan">#4EC9B0</color>
+    <color name="accent_red">#F07178</color>
+    <color name="accent_green">#6A9955</color>
+    <color name="accent_orange">#CE9178</color>
+
+    <!-- Borders (dark) -->
+    <color name="border_default">#1AFFFFFF</color>
+    <color name="border_muted">#0DFFFFFF</color>
+    <color name="border_accent">#4D569CD6</color>
+
+    <!-- System bars (dark) -->
+    <color name="status_bar_color">#121212</color>
+    <color name="nav_bar_color">#121212</color>
+
+    <!-- File icons (dark) -->
+    <color name="file_folder">#D4D4D4</color>
+    <color name="file_default">#9CDCFE</color>
+    <color name="file_enc">#CE9178</color>
+
+    <!-- Pane states (dark) -->
+    <color name="pane_inactive_border">#0DFFFFFF</color>
+    <color name="pane_active_border">#CC569CD6</color>
+    <color name="item_selected_bg">#33569CD6</color>
+
+    <!-- Badge backgrounds (dark) -->
+    <color name="bg_badge_bak">#3C3C3C</color>
+    <color name="bg_badge_py">#1A365D</color>
+    <color name="bg_badge_txt">#064E3B</color>
+    <color name="bg_badge_enc">#7C2D12</color>
+
+    <!-- Badge text (dark) -->
+    <color name="text_badge_bak">#9CDCFE</color>
+    <color name="text_badge_py">#60A5FA</color>
+    <color name="text_badge_txt">#6A9955</color>
+    <color name="text_badge_enc">#CE9178</color>
+    <color name="text_badge_zip">#DCDCAA</color>
+    <color name="text_badge_mp4">#C586C0</color>
+    <color name="text_badge_mp3">#F07178</color>
+    <color name="text_badge_jpg">#CE9178</color>
+    <color name="text_badge_db">#B5CEA8</color>
+    <color name="text_badge_json">#6A9955</color>
+    <color name="text_badge_pdf">#F07178</color>
+    <color name="text_badge_csv">#569CD6</color>
+
+    <!-- Editor-specific colors -->
+    <color name="editor_line_number">#5A5A5A</color>
+    <color name="editor_line_number_bg">#1E1E1E</color>
+    <color name="editor_active_line">#2A2D2E</color>
+    <color name="editor_line_separator">#333333</color>
+    <color name="editor_status_bg">#1E1E1E</color>
+</resources>

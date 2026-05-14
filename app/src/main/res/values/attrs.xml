@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ══════════════════════════════════════════════════
+         XYvion Theme-Switchable Attributes
+         Use these in layouts instead of @color/ / @drawable/
+         so they respond to dark↔light theme changes.
+         ══════════════════════════════════════════════════ -->
+
+    <!-- Backgrounds -->
+    <attr name="xyvionBgMain"       format="reference|color" />
+    <attr name="xyvionBgGlassCard"  format="reference|color" />
+    <attr name="xyvionBgHeader"     format="reference|color" />
+    <attr name="xyvionBgBottomBar"  format="reference|color" />
+    <attr name="xyvionBgFab"        format="reference|color" />
+    <attr name="xyvionBgPane"       format="reference|color" />
+    <attr name="xyvionBgElevated"   format="reference|color" />
+    <attr name="xyvionBgBorder"     format="reference|color" />
+    <attr name="xyvionBgItemRow"   format="reference|color" />
+    <attr name="xyvionBgHeaderBtn" format="reference|color" />
+    <attr name="xyvionBgIconContainer" format="reference|color" />
+    <attr name="xyvionBgChevron"   format="reference|color" />
+    <attr name="xyvionChevronVisible" format="boolean" />
+    <attr name="xyvionBgNavPill"   format="reference|color" />
+    <attr name="xyvionNavIconTint" format="color" />
+    <attr name="xyvionBgQuickCard" format="reference|color" />
+
+
+    <!-- Text -->
+    <attr name="xyvionTextPrimary"   format="color" />
+    <attr name="xyvionTextSecondary" format="color" />
+    <attr name="xyvionTextMuted"     format="color" />
+</resources>

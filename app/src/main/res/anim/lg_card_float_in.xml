@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Liquid Glass: Quick Access cards float in from bottom with spring -->
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <translate
+        android:fromYDelta="40dp"
+        android:toYDelta="0dp"
+        android:duration="450"
+        android:interpolator="@android:interpolator/decelerate_cubic" />
+
+    <alpha
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:duration="350"
+        android:interpolator="@android:interpolator/accelerate_decelerate" />
+
+    <scale
+        android:fromXScale="0.92"
+        android:toXScale="1.0"
+        android:fromYScale="0.92"
+        android:toYScale="1.0"
+        android:pivotX="50%"
+        android:pivotY="100%"
+        android:duration="450"
+        android:interpolator="@android:interpolator/overshoot" />
+
+</set>

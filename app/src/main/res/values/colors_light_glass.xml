@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ══════════════════════════════════════════════════
+         LIQUID GLASS LIGHT THEME – XYvion
+         Ultra-premium frosted glass aesthetic
+         ══════════════════════════════════════════════════ -->
+
+    <!-- Backgrounds -->
+    <color name="lg_bg_primary">#F0F4FF</color>
+    <color name="lg_bg_surface">#F8FAFF</color>
+    <color name="lg_bg_card">#FFFFFF</color>
+    <color name="lg_bg_elevated">#EAEDFF</color>
+    <color name="lg_bg_gradient_start">#EEF2FF</color>
+    <color name="lg_bg_gradient_end">#F5F0FF</color>
+
+    <!-- Frosted glass overlays -->
+    <color name="lg_glass_card">#CCFFFFFF</color>
+    <color name="lg_glass_card_tint">#80DDEEFF</color>
+    <color name="lg_icon_container_bg">#E8F0FE</color>
+    <color name="lg_folder_container_bg">#5B8DEF</color>
+
+    <!-- Accent palette -->
+    <color name="lg_accent_blue">#4A7CF7</color>
+    <color name="lg_accent_blue_dim">#C5D6FD</color>
+    <color name="lg_accent_glow">#664A7CF7</color>
+    <color name="lg_accent_purple">#7C4DFF</color>
+    <color name="lg_accent_cyan">#00BCD4</color>
+    <color name="lg_accent_pink">#E91E8C</color>
+    <color name="lg_accent_red">#EF4444</color>
+    <color name="lg_accent_green">#10B981</color>
+    <color name="lg_accent_orange">#F97316</color>
+
+    <!-- Text -->
+    <color name="lg_text_primary">#1A1A2E</color>
+    <color name="lg_text_secondary">#5A6A8A</color>
+    <color name="lg_text_muted">#8896B3</color>
+    <color name="lg_text_link">#4A7CF7</color>
+    <color name="lg_text_on_accent">#FFFFFF</color>
+
+    <!-- Borders (glass edges) -->
+    <color name="lg_border_default">#33FFFFFF</color>
+    <color name="lg_border_outer">#22000060</color>
+    <color name="lg_border_accent">#664A7CF7</color>
+    <color name="lg_stroke_glass">#80FFFFFF</color>
+
+    <!-- System bars -->
+    <color name="lg_status_bar">#EEF2FF</color>
+    <color name="lg_nav_bar">#F0F4FF</color>
+
+    <!-- Pane states -->
+    <color name="lg_pane_inactive_border">#1A000080</color>
+    <color name="lg_pane_active_border">#CC4A7CF7</color>
+    <color name="lg_item_selected_bg">#334A7CF7</color>
+
+    <!-- Badge colors (dark, for light bg) -->
+    <color name="lg_bg_badge_bak">#E2E8F0</color>
+    <color name="lg_bg_badge_py">#DBEAFE</color>
+    <color name="lg_bg_badge_txt">#D1FAE5</color>
+    <color name="lg_bg_badge_enc">#FEE2E2</color>
+    <color name="lg_text_badge_bak">#475569</color>
+    <color name="lg_text_badge_py">#1D4ED8</color>
+    <color name="lg_text_badge_txt">#065F46</color>
+    <color name="lg_text_badge_enc">#B91C1C</color>
+    <color name="lg_text_badge_zip">#92400E</color>
+    <color name="lg_text_badge_mp4">#9D174D</color>
+    <color name="lg_text_badge_mp3">#9F1239</color>
+    <color name="lg_text_badge_jpg">#9A3412</color>
+    <color name="lg_text_badge_db">#5B21B6</color>
+    <color name="lg_text_badge_json">#064E3B</color>
+    <color name="lg_text_badge_pdf">#991B1B</color>
+    <color name="lg_text_badge_csv">#1E40AF</color>
+
+    <!-- File icon colors -->
+    <color name="lg_file_folder">#4A7CF7</color>
+    <color name="lg_file_default">#5A6A8A</color>
+    <color name="lg_file_enc">#F97316</color>
+</resources>

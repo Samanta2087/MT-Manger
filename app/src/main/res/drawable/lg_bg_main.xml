@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Soft blue-gray background matching HTML: #F0F2F8 with subtle ambient glow -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F0F2F8" />
+        </shape>
+    </item>
+    <!-- Soft blue ambient glow top-right -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="350dp"
+                android:centerX="0.85"
+                android:centerY="0.05"
+                android:startColor="#184A7CF7"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+    <!-- Soft purple ambient glow bottom-left -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="300dp"
+                android:centerX="0.1"
+                android:centerY="0.85"
+                android:startColor="#14A855F7"
+                android:endColor="#00FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

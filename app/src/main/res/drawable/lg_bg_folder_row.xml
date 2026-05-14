@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Individual folder row card – large glass card -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Depth shadow -->
+    <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="-3dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#0F000050" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+    <!-- Pure white frosted card -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#EEFFFFFF" />
+            <corners android:radius="16dp" />
+            <stroke android:width="1dp" android:color="#65FFFFFF" />
+        </shape>
+    </item>
+    <!-- Glossy top reflection – fixed 20dp instead of 55% -->
+    <item android:bottom="20dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#50FFFFFF"
+                android:endColor="#00FFFFFF" />
+            <corners
+                android:topLeftRadius="16dp"
+                android:topRightRadius="16dp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp" />
+        </shape>
+    </item>
+</layer-list>

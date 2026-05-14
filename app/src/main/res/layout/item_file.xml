@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Outer wrapper adds margin so glass cards have spacing -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp">
+
+    <!-- Inner card: gets glass bg in light, transparent in dark -->
+    <LinearLayout
+        android:id="@+id/itemRowCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:orientation="vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:background="?attr/xyvionBgItemRow"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <!-- Main row: icon + info + chevron -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Checkbox for multi-select -->
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:clickable="false"
+                android:focusable="false"
+                android:buttonTint="@color/accent_blue"
+                android:layout_marginEnd="6dp" />
+
+            <!-- File Type Icon -->
+            <FrameLayout
+                android:id="@+id/iconContainer"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="8dp">
+
+                <ImageView
+                    android:id="@+id/ivFileIcon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_file_flat"
+                    android:scaleType="centerInside" />
+            </FrameLayout>
+
+            <!-- File Info -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- File Name -->
+                <TextView
+                    android:id="@+id/tvFileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/xyvionTextPrimary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:lines="2"
+                    android:ellipsize="end"
+                    android:breakStrategy="simple"
+                    android:hyphenationFrequency="none" />
+
+                <!-- Size + Date row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="1dp">
+
+                    <TextView
+                        android:id="@+id/tvFileSize"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="?attr/xyvionTextSecondary"
+                        android:textSize="10sp"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+                    <TextView
+                        android:id="@+id/tvDot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" • "
+                        android:textColor="?attr/xyvionTextMuted"
+                        android:textSize="10sp"
+                        android:maxLines="1" />
+
+                    <TextView
+                        android:id="@+id/tvFileDate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="?attr/xyvionTextSecondary"
+                        android:textSize="10sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Extension badge -->
+            <TextView
+                android:id="@+id/tvExtBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ext_badge"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:layout_marginEnd="4dp"
+                android:textSize="8sp"
+                android:textColor="?attr/xyvionTextPrimary"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:maxLines="1"
+                android:visibility="gone" />
+
+            <!-- Chevron arrow (visible for folders in light theme) -->
+            <FrameLayout
+                android:id="@+id/chevronContainer"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:background="?attr/xyvionBgChevron"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/ivChevron"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_arrow_back"
+                    android:rotation="180"
+                    android:tint="?attr/xyvionTextMuted" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- Folder occupancy progress bar (visible only for folders) -->
+        <LinearLayout
+            android:id="@+id/occupancyContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone">
+
+            <!-- Thin progress bar track -->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_occupancy_track">
+
+                <View
+                    android:id="@+id/occupancyFill"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_occupancy_fill"
+                    android:layout_gravity="start|center_vertical" />
+
+            </FrameLayout>
+
+            <!-- Occupancy percentage label -->
+            <TextView
+                android:id="@+id/tvOccupancyPct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textSize="9sp"
+                android:textColor="?attr/xyvionTextMuted"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

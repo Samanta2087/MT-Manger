@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/xyvionBgMain">
+
+    <!-- ════════════ SCROLLABLE CONTENT ════════════ -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/rootScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="76dp">
+
+            <!-- ─── HEADER ─── -->
+            <LinearLayout
+                android:id="@+id/headerBar"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <!-- Left: Menu + Logo -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/btnMenu"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:padding="10dp"
+                        android:background="?attr/xyvionBgHeaderBtn"
+                        android:src="@drawable/ic_menu"
+                        android:tint="?attr/xyvionTextPrimary"
+                        android:contentDescription="Menu" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginStart="12dp">
+
+                        <TextView
+                            android:id="@+id/tvAppTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="XYvion"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="-0.04"
+                            android:fontFamily="sans-serif-black"
+                            android:maxLines="1" />
+
+                        <TextView
+                            android:id="@+id/tvAppSubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="File Manager"
+                            android:textColor="?attr/xyvionTextSecondary"
+                            android:textSize="11sp"
+                            android:layout_marginTop="-2dp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Right: Action buttons -->
+                <ImageButton
+                    android:id="@+id/btnSearch"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:padding="10dp"
+                    android:layout_marginStart="6dp"
+                    android:background="?attr/xyvionBgHeaderBtn"
+                    android:src="@drawable/ic_search"
+                    android:tint="?attr/xyvionTextPrimary"
+                    android:contentDescription="Search" />
+
+                <ImageButton
+                    android:id="@+id/btnMore"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:padding="10dp"
+                    android:layout_marginStart="6dp"
+                    android:background="?attr/xyvionBgHeaderBtn"
+                    android:src="@drawable/ic_more_vert"
+                    android:tint="?attr/xyvionTextPrimary"
+                    android:contentDescription="More options" />
+
+            </LinearLayout>
+
+            <!-- ─── QUICK ACCESS CARD ─── -->
+            <LinearLayout
+                android:id="@+id/quickAccessSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/xyvionBgGlassCard"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:padding="16dp">
+
+                <!-- Quick Access header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="14dp">
+
+                    <FrameLayout
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:background="@drawable/bg_quick_access_star"
+                        android:layout_marginEnd="8dp">
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_star"
+                            android:tint="#FFFFFF" />
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quick Access"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/xyvionTextPrimary" />
+                </LinearLayout>
+
+                <!-- ── Single row: 4 vertical neumorphic cards ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Images -->
+                    <LinearLayout
+                        android:id="@+id/btnQuickImages"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:background="?attr/xyvionBgQuickCard"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/lg_ic_quick_images"
+                            android:scaleType="fitCenter" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Images"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/xyvionTextPrimary"
+                            android:layout_marginTop="6dp"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <!-- Videos -->
+                    <LinearLayout
+                        android:id="@+id/btnQuickVideos"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:background="?attr/xyvionBgQuickCard"
+                        android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/lg_ic_quick_videos"
+                            android:scaleType="fitCenter" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Videos"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/xyvionTextPrimary"
+                            android:layout_marginTop="6dp"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <!-- Docs -->
+                    <LinearLayout
+                        android:id="@+id/btnQuickDocs"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:background="?attr/xyvionBgQuickCard"
+                        android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/lg_ic_quick_docs"
+                            android:scaleType="fitCenter" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Docs"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/xyvionTextPrimary"
+                            android:layout_marginTop="6dp"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                    <!-- Downloads -->
+                    <LinearLayout
+                        android:id="@+id/btnQuickDownloads"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="10dp"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:background="?attr/xyvionBgQuickCard"
+                        android:layout_marginStart="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="38dp"
+                            android:layout_height="38dp"
+                            android:src="@drawable/lg_ic_quick_downloads"
+                            android:scaleType="fitCenter" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Downloads"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/xyvionTextPrimary"
+                            android:layout_marginTop="6dp"
+                            android:maxLines="1" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ─── FOLDERS CARD ─── -->
+
+            <LinearLayout
+                android:id="@+id/foldersSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/xyvionBgGlassCard"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="8dp">
+
+                <!-- Folders header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_folder_flat"
+                        android:tint="?attr/xyvionTextSecondary"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Folders"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/xyvionTextPrimary" />
+
+                    <LinearLayout
+                        android:id="@+id/btnSort"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:minWidth="80dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="?attr/xyvionBgPane"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:clickable="true"
+                        android:focusable="true">
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_sort_arrows"
+                            android:tint="?attr/xyvionTextSecondary" />
+                        <TextView
+                            android:id="@+id/tvSortLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Name"
+                            android:textSize="11sp"
+                            android:textColor="?attr/xyvionTextSecondary"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:layout_marginStart="4dp" />
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:src="@drawable/ic_arrow_down"
+                            android:tint="?attr/xyvionTextMuted"
+                            android:layout_marginStart="2dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- The pane container (single-pane: only left) -->
+                <LinearLayout
+                    android:id="@+id/dualPaneContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:minHeight="350dp">
+
+                    <FrameLayout
+                        android:id="@+id/leftPaneContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:minHeight="350dp"
+                        android:layout_weight="1" />
+
+                    <!-- Hidden right pane kept for code compatibility -->
+                    <FrameLayout
+                        android:id="@+id/rightPaneContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- ════════════ GLASSMORPHISM TOOLBAR ════════════ -->
+    <FrameLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="16dp">
+
+        <!-- Ambient glow behind toolbar (light theme only) -->
+        <View
+            android:id="@+id/barGlowView"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/lg_bg_sphere_glow_v2"
+            android:alpha="0.0" />
+
+        <!-- Glassmorphism Toolbar Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/lg_bg_glass_toolbar"
+            android:elevation="14dp">
+
+            <!-- Back -->
+            <LinearLayout
+                android:id="@+id/btnNavBack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="@drawable/lg_sel_toolbar_btn"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="?attr/xyvionNavIconTint" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#94A3B8"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:letterSpacing="0.03" />
+            </LinearLayout>
+
+            <!-- Forward -->
+            <LinearLayout
+                android:id="@+id/btnNavForward"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/lg_sel_toolbar_btn"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:rotation="180"
+                    android:tint="?attr/xyvionNavIconTint" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Forward"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#94A3B8"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:letterSpacing="0.03" />
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/lg_bg_toolbar_divider" />
+
+            <!-- 3D Sphere Add Button Wrapper -->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp">
+
+                <!-- Outer glow ring -->
+                <View
+                    android:id="@+id/fabGlowRing"
+                    android:layout_width="62dp"
+                    android:layout_height="62dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/lg_bg_sphere_glow_v2"
+                    android:alpha="0.35" />
+
+                <!-- Sphere FAB -->
+                <FrameLayout
+                    android:id="@+id/btnCreate"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/lg_bg_sphere_fab_v2"
+                    android:elevation="12dp"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="+"
+                        android:textColor="#FFFFFF"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        android:includeFontPadding="false"
+                        android:elevation="4dp" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/lg_bg_toolbar_divider" />
+
+            <!-- Swap -->
+            <LinearLayout
+                android:id="@+id/btnSwap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/lg_sel_toolbar_btn"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_swap"
+                    android:tint="?attr/xyvionNavIconTint" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Swap"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:textColor="#94A3B8"
+                    android:maxLines="1"
+                    android:gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:letterSpacing="0.03" />
+            </LinearLayout>
+
+            <!-- Sort (with badge) -->
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp">
+                <LinearLayout
+                    android:id="@+id/btnSortBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    android:background="@drawable/lg_sel_toolbar_btn"
+                    android:clickable="true"
+                    android:focusable="true">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_sort_arrows"
+                        android:tint="?attr/xyvionNavIconTint" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sort"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="#94A3B8"
+                        android:maxLines="1"
+                        android:gravity="center"
+                        android:layout_marginTop="3dp"
+                        android:letterSpacing="0.03" />
+                </LinearLayout>
+
+                <!-- Sort indicator dot — appears when non-default sort is active -->
+                <TextView
+                    android:id="@+id/sortBadge"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:background="@drawable/lg_bg_badge_red"
+                    android:text=""
+                    android:textSize="0sp"
+                    android:gravity="center"
+                    android:elevation="4dp"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- Paste (hidden by default, shown during copy operation) -->
+        <FrameLayout
+            android:id="@+id/btnPaste"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="26dp"
+            android:background="@drawable/lg_bg_toolbar_btn"
+            android:elevation="20dp"
+            android:visibility="gone">
+            <ImageView
+                android:id="@+id/btnPasteIcon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_copy"
+                android:tint="@color/lg_accent_blue" />
+        </FrameLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

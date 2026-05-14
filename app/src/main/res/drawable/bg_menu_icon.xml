@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Theme-aware menu icon circle — light: soft blue tint, dark: dark navy -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/icon_container_bg" />
+</shape>

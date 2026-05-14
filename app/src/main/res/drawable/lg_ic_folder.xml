@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- icons8 Blue Gradient Folder — converted from SVG to Android VectorDrawable -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="128dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Back body (dark blue) -->
+    <path
+        android:pathData="M26,27H6C4.895,27 4,26.105 4,25V7C4,5.895 4.895,5 6,5H10.027C10.65,5 11.247,5.247 11.687,5.688L12.311,6.312C12.753,6.753 13.35,7 13.973,7H26C27.105,7 28,7.895 28,9V25C28,26.105 27.105,27 26,27Z"
+        android:fillColor="#008CC7" />
+
+    <!-- Front body (bright blue) -->
+    <path
+        android:pathData="M27,27H5C3.895,27 3,26.105 3,25V11C3,9.895 3.895,9 5,9H27C28.105,9 29,9.895 29,11V25C29,26.105 28.105,27 27,27Z"
+        android:fillColor="#00DCFF" />
+
+    <!-- Gloss highlight on front -->
+    <path
+        android:pathData="M3,11C3,9.895 3.895,9 5,9H27C28.105,9 29,9.895 29,11V15C28,13 16,12 3,14V11Z"
+        android:fillColor="#40FFFFFF" />
+
+</vector>

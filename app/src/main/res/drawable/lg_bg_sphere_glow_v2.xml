@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Outer glow ring for 3D sphere — soft purple/blue aura -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <gradient
+        android:type="radial"
+        android:startColor="#50A78BFA"
+        android:centerColor="#2060A5FA"
+        android:endColor="#00FFFFFF"
+        android:gradientRadius="36dp" />
+</shape>

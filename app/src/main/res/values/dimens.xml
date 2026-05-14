@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="pane_divider_width">1dp</dimen>
+    <dimen name="bottom_bar_height">48dp</dimen>
+    <dimen name="header_height">52dp</dimen>
+    <dimen name="breadcrumb_height">40dp</dimen>
+    <dimen name="file_item_height">56dp</dimen>
+    <dimen name="file_icon_size">36dp</dimen>
+    <dimen name="file_icon_inner">20dp</dimen>
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">12dp</dimen>
+    <dimen name="spacing_lg">16dp</dimen>
+    <dimen name="spacing_xl">24dp</dimen>
+    <dimen name="editor_font_size">13sp</dimen>
+    <dimen name="editor_line_number_width">48dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="corner_radius_sm">4dp</dimen>
+</resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Glassmorphism Toolbar Background — translucent frosted glass with subtle border and layered shadow -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer soft shadow (ambient) -->
+    <item
+        android:top="3dp"
+        android:left="6dp"
+        android:right="6dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#15000050" />
+            <corners android:radius="26dp" />
+        </shape>
+    </item>
+
+    <!-- Mid diffuse shadow -->
+    <item
+        android:top="2dp"
+        android:left="3dp"
+        android:right="3dp"
+        android:bottom="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#20000040" />
+            <corners android:radius="25dp" />
+        </shape>
+    </item>
+
+    <!-- Main glass surface: translucent white -->
+    <item android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#D8FFFFFF" />
+            <corners android:radius="24dp" />
+            <stroke
+                android:width="1dp"
+                android:color="#55FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- Top edge highlight (glass reflection) -->
+    <item
+        android:bottom="36dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:startColor="#50FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+            <corners
+                android:topLeftRadius="24dp"
+                android:topRightRadius="24dp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp" />
+        </shape>
+    </item>
+
+    <!-- Inner soft gradient tint for depth -->
+    <item
+        android:top="8dp"
+        android:left="8dp"
+        android:right="8dp"
+        android:bottom="8dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:startColor="#08A78BFA"
+                android:endColor="#0860A5FA"
+                android:angle="135" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+</layer-list>

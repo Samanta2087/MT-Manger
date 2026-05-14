@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Light Theme: Pink → Purple → Periwinkle Blue gradient FAB (matching reference image) -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer drop shadow ring -->
+    <item android:top="5dp" android:left="5dp" android:right="5dp" android:bottom="-2dp">
+        <shape android:shape="oval">
+            <solid android:color="#30A78BFA" />
+        </shape>
+    </item>
+
+    <!-- Mid soft glow layer -->
+    <item android:top="3dp" android:left="3dp" android:right="3dp" android:bottom="0dp">
+        <shape android:shape="oval">
+            <solid android:color="#20E879F9" />
+        </shape>
+    </item>
+
+    <!-- Main gradient orb: fuchsia-pink → purple → periwinkle blue -->
+    <item android:bottom="2dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="linear"
+                android:startColor="#F472B6"
+                android:centerColor="#A855F7"
+                android:endColor="#818CF8"
+                android:angle="135" />
+            <!-- Subtle frosted glass border -->
+            <stroke
+                android:width="1.5dp"
+                android:color="#D0F5F0FF" />
+        </shape>
+    </item>
+
+    <!-- Top-left specular catchlight (glassy shine) -->
+    <item
+        android:top="4dp"
+        android:left="8dp"
+        android:right="20dp"
+        android:bottom="32dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="linear"
+                android:startColor="#70FFFFFF"
+                android:endColor="#00FFFFFF"
+                android:angle="270" />
+        </shape>
+    </item>
+
+    <!-- Bottom-right secondary gloss (blue tint catchlight) -->
+    <item
+        android:top="36dp"
+        android:left="24dp"
+        android:right="8dp"
+        android:bottom="6dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="linear"
+                android:startColor="#00FFFFFF"
+                android:endColor="#30FFFFFF"
+                android:angle="270" />
+        </shape>
+    </item>
+
+</layer-list>

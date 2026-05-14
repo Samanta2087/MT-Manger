@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="80dp"
+    android:height="80dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Left stem (blue) -->
+    <path
+        android:pathData="M26,68 L26,33 L32,31 L32,66 Z"
+        android:fillColor="#4F8EF7"/>
+
+    <!-- Right stem (purple) -->
+    <path
+        android:pathData="M66,60 L66,25 L72,23 L72,58 Z"
+        android:fillColor="#A855F7"/>
+
+    <!-- Beam (blue→purple blend) -->
+    <path
+        android:pathData="M26,33 L72,23 L72,29 L26,39 Z"
+        android:fillColor="#7B6AFA"/>
+
+    <!-- Left note head (blue ellipse) -->
+    <path
+        android:pathData="M14,70 a14,9 0 1 0 28,0 a14,9 0 1 0 -28,0"
+        android:fillColor="#4F8EF7"/>
+
+    <!-- Left head inner shine -->
+    <path
+        android:pathData="M18,66 a6,4 0 1 0 10,0 a6,4 0 1 0 -10,0"
+        android:fillColor="#80AAEEFF"
+        android:fillAlpha="0.5"/>
+
+    <!-- Right note head (purple ellipse) -->
+    <path
+        android:pathData="M54,62 a14,9 0 1 0 28,0 a14,9 0 1 0 -28,0"
+        android:fillColor="#A855F7"/>
+
+    <!-- Right head inner shine -->
+    <path
+        android:pathData="M58,58 a6,4 0 1 0 10,0 a6,4 0 1 0 -10,0"
+        android:fillColor="#80CC88FF"
+        android:fillAlpha="0.5"/>
+
+</vector>
