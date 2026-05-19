@@ -39,6 +39,10 @@
         <item name="xyvionBgNavPill">@drawable/bg_nav_pill_dark</item>
         <item name="xyvionNavIconTint">@color/text_secondary</item>
         <item name="xyvionBgQuickCard">@drawable/bg_quick_card</item>
+        <item name="xyvionBgSearchHeader">@drawable/bg_header</item>
+        <item name="xyvionBgSearchField">@drawable/bg_edittext</item>
+        <item name="xyvionBgChipNormal">@drawable/lg_bg_category_chip</item>
+        <item name="xyvionBgChipSelected">@drawable/bg_search_chip_selected</item>
     </style>
 
     <style name="WindowFadeAnimation" parent="@android:style/Animation.Activity">
@@ -159,6 +163,10 @@
         <item name="xyvionBgNavPill">@drawable/lg_bg_nav_pill</item>
         <item name="xyvionNavIconTint">@color/lg_text_secondary</item>
         <item name="xyvionBgQuickCard">@drawable/lg_bg_quick_card</item>
+        <item name="xyvionBgSearchHeader">@drawable/lg_bg_search_header</item>
+        <item name="xyvionBgSearchField">@drawable/lg_bg_search_field</item>
+        <item name="xyvionBgChipNormal">@drawable/lg_bg_category_chip</item>
+        <item name="xyvionBgChipSelected">@drawable/lg_bg_search_chip_selected</item>
     </style>
 
     <style name="LiquidGlass.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">

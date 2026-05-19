@@ -1,11 +1,14 @@
 package com.mtmanager.lite.ui.editor
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.mtmanager.lite.databinding.ItemEditorLineBinding
 import com.mtmanager.lite.utils.SyntaxHighlighter
@@ -19,7 +22,8 @@ class LineAdapter(
     val lines: MutableList<String>,
     private val onChanged: () -> Unit,
     private val onCursorMoved: (line: Int, col: Int) -> Unit,
-    val onSelectionChanged: (hasSelection: Boolean) -> Unit = {}
+    val onSelectionChanged: (hasSelection: Boolean) -> Unit = {},
+    val onLongPress: (() -> Unit)? = null
 ) : RecyclerView.Adapter<LineAdapter.LineVH>() {
 
     var fontSize: Float = 13f
@@ -27,7 +31,6 @@ class LineAdapter(
     var fileExtension: String = ""
     var isSelectAllActive: Boolean = false
 
-    // Track last focused EditText for symbol bar insertion
     var lastFocusedEdit: SelectionEditText? = null
     var lastFocusedLine: Int = 0
 
@@ -38,11 +41,10 @@ class LineAdapter(
         rv = recyclerView
     }
 
-    // ── ViewHolder ────────────────────────────────────────────────────────────
     inner class LineVH(val b: ItemEditorLineBinding) : RecyclerView.ViewHolder(b.root) {
         var isBinding = false
         var watcher: TextWatcher? = null
-        var highlightJob: Job? = null      // cancel stale highlight on rebind
+        var highlightJob: Job? = null
 
         fun removeWatcher() {
             watcher?.let { b.etLine.removeTextChangedListener(it) }
@@ -53,7 +55,6 @@ class LineAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         LineVH(ItemEditorLineBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    // ── Bind ──────────────────────────────────────────────────────────────────
     override fun onBindViewHolder(holder: LineVH, position: Int) {
         holder.highlightJob?.cancel()
         holder.isBinding = true
@@ -64,11 +65,10 @@ class LineAdapter(
         holder.b.tvLineNum.text     = (position + 1).toString()
         holder.b.tvLineNum.textSize = fontSize
         holder.b.etLine.textSize    = fontSize
-        holder.b.etLine.isEnabled   = !isReadOnly && !isSelectAllActive
+        holder.b.etLine.isEnabled   = !isReadOnly
 
-        // Visual select-all highlight
         if (isSelectAllActive) {
-            holder.b.root.setBackgroundColor(0x33264F78)  // semi-transparent blue
+            holder.b.root.setBackgroundColor(0x33264F78)
             holder.b.activeLineHighlight.visibility = View.GONE
             holder.b.etLine.setText(lineText)
             holder.b.etLine.setSelection(0, lineText.length)
@@ -78,15 +78,34 @@ class LineAdapter(
             holder.b.etLine.setText(lineText)
         }
 
-        // No InputFilter — newlines are handled in afterTextChanged (soft-keyboard Enter)
         holder.b.etLine.filters = arrayOf()
-
         holder.isBinding = false
 
-        // ── Async syntax highlight ─────────────────────────────────────────────
         applySyntaxHighlight(holder, lineText)
 
-        // ── TextWatcher: sync model, re-highlight, handle soft-keyboard Enter ────────
+        // ── Intercept system multi-line paste ──────────────────────────────────
+        holder.b.etLine.onPaste = { pastedText ->
+            val pos = holder.bindingAdapterPosition
+            if (pos == RecyclerView.NO_POSITION) {
+                false
+            } else if (isSelectAllActive) {
+                val newLines = pastedText.split("\n").toMutableList()
+                lines.clear()
+                lines.addAll(if (newLines.isEmpty()) mutableListOf("") else newLines)
+                isSelectAllActive = false
+                notifyDataSetChanged()
+                onChanged()
+                true
+            } else {
+                val et = holder.b.etLine
+                val selStart = et.selectionStart.coerceAtLeast(0).coerceAtMost(lineText.length)
+                val selEnd = et.selectionEnd.coerceAtLeast(selStart).coerceAtMost(lineText.length)
+                insertMultiLine(pos, pastedText, selStart, selEnd)
+                true
+            }
+        }
+
+        // ── TextWatcher ────────────────────────────────────────────────────────
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
             override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
@@ -96,24 +115,28 @@ class LineAdapter(
                 if (pos == RecyclerView.NO_POSITION) return
                 val raw = s?.toString() ?: ""
 
-                // Soft keyboard Enter → \n in text → split the line
+                // Handle newlines from soft-keyboard Enter or IME that
+                // somehow bypassed onPaste (shouldn't happen for paste, but
+                // Enter key still comes through here)
                 val nlIdx = raw.indexOf('\n')
                 if (nlIdx >= 0) {
-                    val before = raw.substring(0, nlIdx)
-                    val after  = raw.substring(nlIdx + 1)
+                    val parts = raw.split("\n")
                     holder.isBinding = true
-                    s?.replace(0, s.length, before)   // fix this view's text
+                    s?.replace(0, s.length, parts[0])
                     holder.isBinding = false
-                    lines[pos] = before
-                    lines.add(pos + 1, after)
-                    notifyItemChanged(pos)
-                    notifyItemInserted(pos + 1)
+                    lines[pos] = parts[0]
+                    for (i in (parts.size - 1) downTo 1) {
+                        lines.add(pos + 1, parts[i])
+                    }
+                    notifyDataSetChanged()
                     onChanged()
+                    val focusPos = (pos + parts.size - 1).coerceAtMost(lines.size - 1)
+                    val cursorInLast = parts[parts.size - 1].length
                     rv.postDelayed({
-                        rv.scrollToPosition(pos + 1)
-                        (rv.findViewHolderForAdapterPosition(pos + 1) as? LineVH)
-                            ?.b?.etLine?.apply { requestFocus(); setSelection(0) }
-                    }, 50)
+                        rv.scrollToPosition(focusPos)
+                        (rv.findViewHolderForAdapterPosition(focusPos) as? LineVH)
+                            ?.b?.etLine?.apply { requestFocus(); setSelection(cursorInLast) }
+                    }, 150)
                     return
                 }
 
@@ -125,7 +148,7 @@ class LineAdapter(
         holder.watcher = watcher
         holder.b.etLine.addTextChangedListener(watcher)
 
-        // ── Focus tracking + active line highlight ─────────────────────────────
+        // ── Focus tracking ────────────────────────────────────────────────────
         holder.b.etLine.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 lastFocusedEdit = holder.b.etLine
@@ -140,13 +163,11 @@ class LineAdapter(
             }
         }
 
-        // ── Selection tracking via SelectionEditText callback ─────────────────
-        //    The system floating toolbar is already suppressed inside SelectionEditText.
         holder.b.etLine.onSelectionChangedListener = { hasSelection ->
             onSelectionChanged(hasSelection)
         }
 
-        // ── Key listener: Enter = split, Backspace at col 0 = merge ──────────
+        // ── Key listener ───────────────────────────────────────────────────────
         holder.b.etLine.setOnKeyListener { _, keyCode, event ->
             if (event.action != KeyEvent.ACTION_DOWN) return@setOnKeyListener false
             val pos = holder.bindingAdapterPosition
@@ -187,21 +208,46 @@ class LineAdapter(
                 else -> false
             }
         }
+
+        // ── Long-press on EditText → show action bar (so Paste is accessible) ──
+        holder.b.etLine.setOnLongClickListener {
+            onLongPress?.invoke()
+            false   // let the system handle selection too
+        }
     }
 
-    // ── Syntax highlight (async, cancellable per ViewHolder) ─────────────────
+    // ── Model-level multi-line insert (used by onPaste callback and popup Paste button) ──
+    fun insertMultiLine(pos: Int, text: String, selStart: Int, selEnd: Int) {
+        val currentLine = lines[pos]
+        val before = currentLine.substring(0, selStart.coerceAtMost(currentLine.length))
+        val after = currentLine.substring(selEnd.coerceAtMost(currentLine.length))
+        val pasteLines = text.split("\n")
+
+        lines[pos] = before + pasteLines[0]
+        for (i in (pasteLines.size - 1) downTo 1) {
+            lines.add(pos + 1, pasteLines[i] + if (i == pasteLines.size - 1) after else "")
+        }
+        notifyDataSetChanged()
+        onChanged()
+
+        val focusPos = (pos + pasteLines.size - 1).coerceAtMost(lines.size - 1)
+        val cursorInLast = (pasteLines[pasteLines.size - 1] + after).length
+        rv.postDelayed({
+            rv.scrollToPosition(focusPos)
+            (rv.findViewHolderForAdapterPosition(focusPos) as? LineVH)
+                ?.b?.etLine?.apply { requestFocus(); setSelection(cursorInLast) }
+        }, 150)
+    }
+
     private fun applySyntaxHighlight(holder: LineVH, text: String) {
         if (fileExtension.isEmpty()) return
         holder.highlightJob?.cancel()
         holder.highlightJob = CoroutineScope(Dispatchers.Default).launch {
             val spannable = SyntaxHighlighter.highlightLine(text, fileExtension)
             withContext(Dispatchers.Main) {
-                // Guard: bail if ViewHolder was rebound to different line while we computed
                 val editable = holder.b.etLine.editableText
                 if (editable == null || editable.toString() != text) return@withContext
 
-                // Remove old color spans, then inject new ones directly.
-                // NOTE: removeSpan/setSpan do NOT trigger afterTextChanged — safe, no loop.
                 editable.getSpans(0, editable.length, android.text.style.ForegroundColorSpan::class.java)
                     .forEach { editable.removeSpan(it) }
 
@@ -222,10 +268,7 @@ class LineAdapter(
         }
     }
 
-    // ── Recycle: cancel any in-flight highlight, clean listeners ─────────────
     override fun onViewRecycled(holder: LineVH) {
-        // If this ViewHolder held the active selection, dismiss the popup before
-        // clearing the listener — otherwise the popup stays open permanently.
         if (holder.b.etLine === lastFocusedEdit) {
             onSelectionChanged(false)
             lastFocusedEdit = null
@@ -236,6 +279,8 @@ class LineAdapter(
         holder.b.etLine.setOnKeyListener(null)
         holder.b.etLine.onFocusChangeListener = null
         holder.b.etLine.onSelectionChangedListener = null
+        holder.b.etLine.onPaste = null
+        holder.b.etLine.setOnLongClickListener(null)
         super.onViewRecycled(holder)
     }
 

@@ -35,13 +35,16 @@ import java.io.File
 
 class MainActivity : AppCompatActivity(), PaneCallback {
 
+    companion object {
+        private const val REQUEST_SEARCH = 1001
+    }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var leftPane: FilePaneFragment
     private lateinit var rightPane: FilePaneFragment
     private var activePane: FilePaneFragment? = null
 
-    // Toggle state for glassmorphism toolbar
-    private var isSwapToggled = false
+    // (swap feature removed)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // ⚡ Apply persisted theme BEFORE inflation so XML picks the right style
@@ -110,20 +113,18 @@ class MainActivity : AppCompatActivity(), PaneCallback {
 
 
     /**
-     * Paints "XYvion" with a left-to-right gradient matching the logo:
-     * electric blue → violet → hot pink
+     * Paints "FYLOXEN" in #121212 with a very subtle depth gradient
      */
     private fun applyTitleGradient() {
         val tv = findViewById<TextView>(R.id.tvAppTitle) ?: return
         tv.post {
             val w = tv.paint.measureText(tv.text.toString()).takeIf { it > 0f } ?: return@post
-            // Gradient adapts to theme: same vivid colors look great on both
             tv.paint.shader = LinearGradient(
-                0f, 0f, w, tv.textSize,
+                0f, 0f, w, 0f,
                 intArrayOf(
-                    0xFF4FC3F7.toInt(),   // sky blue
-                    0xFF7C4DFF.toInt(),   // deep violet
-                    0xFFE91E8C.toInt()    // vivid pink
+                    0xFF121212.toInt(),   // base
+                    0xFF1E1E1E.toInt(),   // subtle highlight
+                    0xFF121212.toInt()    // base
                 ),
                 floatArrayOf(0f, 0.5f, 1f),
                 Shader.TileMode.CLAMP
@@ -136,6 +137,17 @@ class MainActivity : AppCompatActivity(), PaneCallback {
         super.onResume()
         if (PermissionHelper.hasStoragePermission(this)) {
             if (!::leftPane.isInitialized) initPanes()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_SEARCH && resultCode == RESULT_OK) {
+            val dirPath = data?.getStringExtra(SearchActivity.EXTRA_OPEN_DIR) ?: return
+            val dir = File(dirPath)
+            if (dir.isDirectory && dir.canRead()) {
+                (activePane ?: leftPane).navigateTo(dir)
+            }
         }
     }
 
@@ -345,25 +357,23 @@ class MainActivity : AppCompatActivity(), PaneCallback {
         // Initialize sort UI to match the active pane
         activePane?.getCurrentSortOrder()?.let { updateSortUi(it) }
 
-        // Swap — toggle visual state + action
-        binding.btnSwap.setOnClickListener {
-            try {
-                isSwapToggled = !isSwapToggled
-                binding.btnSwap.isSelected = isSwapToggled
-                val leftPath = leftPane.currentPath
-                val rightPath = rightPane.currentPath
-                leftPane.navigateTo(rightPath, addToHistory = false)
-                // rightPane is never attached to UI — use swapPath() to avoid view lifecycle crash
-                rightPane.swapPath(leftPath)
-            } catch (e: Exception) {
-                Log.e("MainActivity", "Swap failed", e)
-                Toast.makeText(this, "Swap failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                isSwapToggled = false
-                binding.btnSwap.isSelected = false
+        // Home — one-tap jump to root storage from anywhere in the directory tree
+        binding.btnHome.setOnClickListener {
+            val home = android.os.Environment.getExternalStorageDirectory()
+            val pane = activePane
+            if (pane == null) {
+                Toast.makeText(this, "Loading…", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if (pane.currentPath == home) {
+                // Already at home: scroll list to top
+                Toast.makeText(this, "Already at Home", Toast.LENGTH_SHORT).show()
+            } else {
+                pane.navigateTo(home)
             }
         }
-        binding.btnSwap.setOnLongClickListener {
-            Toast.makeText(this, "Swap panes", Toast.LENGTH_SHORT).show()
+        binding.btnHome.setOnLongClickListener {
+            Toast.makeText(this, "Go to Home (root storage)", Toast.LENGTH_SHORT).show()
             true
         }
 
@@ -459,9 +469,9 @@ class MainActivity : AppCompatActivity(), PaneCallback {
         // 🔍 Search
         binding.btnSearch.setOnClickListener {
             val currentPath = activePane?.currentPath?.absolutePath ?: Environment.getExternalStorageDirectory().absolutePath
-            startActivity(Intent(this, SearchActivity::class.java).apply {
+            startActivityForResult(Intent(this, SearchActivity::class.java).apply {
                 putExtra(SearchActivity.EXTRA_START_PATH, currentPath)
-            })
+            }, REQUEST_SEARCH)
         }
 
         // ☰ Hamburger — main app menu
@@ -473,16 +483,8 @@ class MainActivity : AppCompatActivity(), PaneCallback {
                     0xFF22D3EE.toInt()) { activePane?.toggleHiddenFiles() },
                 SheetItem(R.drawable.ic_sort, "Sort By", 0xFF4F8EF7.toInt()) {
                     activePane?.showSortDialog() },
-                SheetItem(R.drawable.ic_swap, "Swap Panes", 0xFFFBBF24.toInt()) {
-                    try {
-                        val l = leftPane.currentPath; val r = rightPane.currentPath
-                        leftPane.navigateTo(r, addToHistory = false)
-                        rightPane.swapPath(l)
-                    } catch (e: Exception) {
-                        Log.e("MainActivity", "Menu swap failed", e)
-                        Toast.makeText(this@MainActivity, "Swap failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
-                },
+                SheetItem(R.drawable.ic_edit, "New File / Folder", 0xFF34D399.toInt()) {
+                    activePane?.showNewItemDialog() },
                 SheetItem(R.drawable.ic_refresh, "Refresh", 0xFF34D399.toInt()) {
                     activePane?.refresh() },
                 SheetItem(R.drawable.ic_select_all, "Select All", 0xFFA78BFA.toInt()) {
@@ -546,9 +548,6 @@ class MainActivity : AppCompatActivity(), PaneCallback {
         sheet.setContentView(root)
         sheet.show()
     }
-
-    // Helper — reads hidden state from pane
-    private fun getHiddenState(pane: FilePaneFragment) = pane.isShowingHidden()
 
     /** Updates both header sort label and bottom-bar badge to reflect current sort */
     private fun updateSortUi(sortOrder: SortOrder) {
@@ -848,13 +847,11 @@ class MainActivity : AppCompatActivity(), PaneCallback {
     /** Keyboard: ESC clears toggle state and resets sort to default */
     override fun onKeyDown(keyCode: Int, event: android.view.KeyEvent?): Boolean {
         if (keyCode == android.view.KeyEvent.KEYCODE_ESCAPE) {
-            isSwapToggled = false
-            binding.btnSwap.isSelected = false
             activePane?.let { pane ->
                 pane.setSortOrder(SortOrder.NAME_ASC)
                 updateSortUi(SortOrder.NAME_ASC)
             }
-            Toast.makeText(this, "All states cleared", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Sort reset to default", Toast.LENGTH_SHORT).show()
             return true
         }
         return super.onKeyDown(keyCode, event)

@@ -1,20 +1,17 @@
 package com.mtmanager.lite.ui.editor
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.util.AttributeSet
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputConnectionWrapper
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 
-/**
- * EditText that:
- *  1. Fires [onSelectionChangedListener] whenever the selection range changes.
- *  2. Suppresses the system floating text-selection toolbar.
- *  3. Hides the soft keyboard when text is selected (long-press) so it doesn't
- *     pop up unexpectedly. Keyboard shows normally when the user taps to type.
- */
 class SelectionEditText @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -25,8 +22,13 @@ class SelectionEditText @JvmOverloads constructor(
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
 
-    /** Called with `true` when text is selected, `false` when selection is cleared. */
     var onSelectionChangedListener: ((hasSelection: Boolean) -> Unit)? = null
+
+    /**
+     * Called when multi-line text is pasted (from IME, Ctrl+V, or context menu).
+     * Return true if handled at model level — the text will NOT be written to the EditText.
+     */
+    var onPaste: ((pastedText: String) -> Boolean)? = null
 
     override fun onSelectionChanged(selStart: Int, selEnd: Int) {
         super.onSelectionChanged(selStart, selEnd)
@@ -34,24 +36,39 @@ class SelectionEditText @JvmOverloads constructor(
         onSelectionChangedListener?.invoke(hasSelection)
 
         if (hasSelection && windowToken != null) {
-            // Long-press selected text — hide keyboard so it doesn't pop up.
-            // The keyboard will come back naturally when the user taps to type.
             imm.hideSoftInputFromWindow(windowToken, 0)
         }
     }
 
-    // ── Suppress system floating toolbar ─────────────────────────────────────
-    // Returns true  → action mode starts, selection stays alive  ✓
-    // menu?.clear() → no menu items → floating toolbar is invisible ✓
-    // onPrepareActionMode returns false → TextClassifier can't add items back ✓
+    // Intercept system paste (context menu)
+    override fun onTextContextMenuItem(id: Int): Boolean {
+        if (id == android.R.id.paste || id == android.R.id.pasteAsPlainText) {
+            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = clipboard.primaryClip ?: return super.onTextContextMenuItem(id)
+            if (clip.itemCount > 0) {
+                val text = clip.getItemAt(0).coerceToText(context).toString()
+                if (text.contains('\n')) {
+                    val handled = onPaste?.invoke(text) ?: false
+                    if (handled) return true
+                }
+            }
+        }
+        return super.onTextContextMenuItem(id)
+    }
+
+    // Intercept IME paste (Gboard clipboard, Samsung clipboard, etc.)
+    override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection? {
+        val ic = super.onCreateInputConnection(outAttrs) ?: return null
+        return PasteInterceptConnection(ic, this)
+    }
 
     private val suppressCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            menu?.clear()   // remove all items so the floating toolbar has nothing to show
-            return true     // MUST be true — false would cancel selection
+            menu?.clear()
+            return true
         }
         override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            menu?.clear()   // prevent TextClassifier from injecting items back
+            menu?.clear()
             return false
         }
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?) = false
@@ -61,5 +78,31 @@ class SelectionEditText @JvmOverloads constructor(
     init {
         customSelectionActionModeCallback = suppressCallback
         customInsertionActionModeCallback = suppressCallback
+    }
+}
+
+/**
+ * Wraps InputConnection to intercept commitText containing newlines.
+ * This catches Gboard/IME paste buttons that bypass onTextContextMenuItem.
+ */
+class PasteInterceptConnection(
+    delegate: InputConnection,
+    private val editText: SelectionEditText
+) : InputConnectionWrapper(delegate, false) {
+
+    override fun commitText(text: CharSequence?, newCursorPosition: Int): Boolean {
+        if (text != null && text.contains('\n')) {
+            val handled = editText.onPaste?.invoke(text.toString()) ?: false
+            if (handled) return true
+        }
+        return super.commitText(text, newCursorPosition)
+    }
+
+    override fun setComposingText(text: CharSequence?, newCursorPosition: Int): Boolean {
+        if (text != null && text.contains('\n')) {
+            val handled = editText.onPaste?.invoke(text.toString()) ?: false
+            if (handled) return true
+        }
+        return super.setComposingText(text, newCursorPosition)
     }
 }

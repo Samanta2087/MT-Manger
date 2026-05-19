@@ -35,6 +35,7 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_START_PATH = "extra_start_path"
+        const val EXTRA_OPEN_DIR = "extra_open_dir"
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -138,6 +139,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun openFile(file: File) {
+        if (file.isDirectory) {
+            val resultIntent = android.content.Intent()
+            resultIntent.putExtra(EXTRA_OPEN_DIR, file.absolutePath)
+            setResult(RESULT_OK, resultIntent)
+            finish()
+            return
+        }
         val item = FileItem(file)
         when {
             item.isTextFile() -> {
@@ -157,17 +165,75 @@ class SearchActivity : AppCompatActivity() {
             item.isAudioFile() -> {
                 startActivity(android.content.Intent(this,
                     com.mtmanager.lite.ui.viewer.AudioPlayerActivity::class.java).apply {
-                    putExtra("file_path", file.absolutePath)
+                    putExtra(com.mtmanager.lite.ui.viewer.AudioPlayerActivity.EXTRA_FILE_PATH,
+                        file.absolutePath)
                 })
             }
             item.isVideoFile() -> {
                 startActivity(android.content.Intent(this,
                     com.mtmanager.lite.ui.viewer.VideoPlayerActivity::class.java).apply {
-                    putExtra("file_path", file.absolutePath)
+                    putExtra(com.mtmanager.lite.ui.viewer.VideoPlayerActivity.EXTRA_FILE_PATH,
+                        file.absolutePath)
                 })
             }
-            else -> Toast.makeText(this, file.absolutePath, Toast.LENGTH_SHORT).show()
+            item.extension == "pdf" -> {
+                startActivity(android.content.Intent(this,
+                    com.mtmanager.lite.ui.viewer.PdfViewerActivity::class.java).apply {
+                    putExtra(com.mtmanager.lite.ui.viewer.PdfViewerActivity.EXTRA_FILE_PATH,
+                        file.absolutePath)
+                })
+            }
+            item.extension in setOf("csv", "tsv") -> {
+                startActivity(android.content.Intent(this,
+                    com.mtmanager.lite.ui.viewer.CsvViewerActivity::class.java).apply {
+                    putExtra(com.mtmanager.lite.ui.viewer.CsvViewerActivity.EXTRA_FILE_PATH,
+                        file.absolutePath)
+                })
+            }
+            item.extension in setOf("docx", "odt") -> {
+                startActivity(android.content.Intent(this,
+                    com.mtmanager.lite.ui.viewer.DocxViewerActivity::class.java).apply {
+                    putExtra(com.mtmanager.lite.ui.viewer.DocxViewerActivity.EXTRA_FILE_PATH,
+                        file.absolutePath)
+                })
+            }
+            item.isApkFile() -> showApkInfoDialog(file)
+            else -> {
+                val resultIntent = android.content.Intent()
+                resultIntent.putExtra(EXTRA_OPEN_DIR, file.parent)
+                setResult(RESULT_OK, resultIntent)
+                finish()
+            }
         }
+    }
+
+    private fun showApkInfoDialog(file: File) {
+        val pm = packageManager
+        val info = pm.getPackageArchiveInfo(file.absolutePath, 0)
+        val msg = if (info != null) {
+            "Package: ${info.packageName}\nVersion: ${info.versionName}\nSize: ${
+                android.text.format.Formatter.formatShortFileSize(this, file.length())}"
+        } else {
+            "Could not read APK info.\nSize: ${
+                android.text.format.Formatter.formatShortFileSize(this, file.length())}"
+        }
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+            .setTitle(file.name)
+            .setMessage(msg)
+            .setPositiveButton("Install") { _, _ ->
+                try {
+                    val uri = androidx.core.content.FileProvider.getUriForFile(
+                        this, "$packageName.provider", file)
+                    startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                        setDataAndType(uri, "application/vnd.android.package-archive")
+                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    })
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Cannot install: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private var textWatcherSetup = false
@@ -194,6 +260,20 @@ class SearchActivity : AppCompatActivity() {
         val hPad = (12 * density).toInt()
         val vPad = (4 * density).toInt()
         val chips = mutableListOf<TextView>()
+
+        val chipNormalBg = obtainStyledAttributes(intArrayOf(R.attr.xyvionBgChipNormal)).let { ta ->
+            val d = ta.getDrawable(0); ta.recycle(); d
+        }
+        val chipSelectedBg = obtainStyledAttributes(intArrayOf(R.attr.xyvionBgChipSelected)).let { ta ->
+            val d = ta.getDrawable(0); ta.recycle(); d
+        }
+        val textColorPrimary = obtainStyledAttributes(intArrayOf(R.attr.xyvionTextPrimary)).let { ta ->
+            val c = ta.getColor(0, 0); ta.recycle(); c
+        }
+        val textColorSecondary = obtainStyledAttributes(intArrayOf(R.attr.xyvionTextSecondary)).let { ta ->
+            val c = ta.getColor(0, 0); ta.recycle(); c
+        }
+
         filterOptions.forEachIndexed { index, option ->
             val chip = TextView(this).apply {
                 text = option.label
@@ -201,19 +281,19 @@ class SearchActivity : AppCompatActivity() {
                 setTypeface(null, Typeface.BOLD)
                 setPadding(hPad, vPad, hPad, vPad)
                 gravity = Gravity.CENTER
-                setBackgroundResource(R.drawable.lg_bg_category_chip)
-                setTextColor(getColor(R.color.text_secondary))
+                background = chipNormalBg?.constantState?.newDrawable()?.mutate()
+                setTextColor(textColorSecondary)
                 tag = index
                 setOnClickListener {
                     val clicked = it as TextView
                     val idx = clicked.tag as Int
                     val opt = filterOptions[idx]
                     if (activeChip == clicked) return@setOnClickListener
-                    activeChip?.setBackgroundResource(R.drawable.lg_bg_category_chip)
-                    activeChip?.setTextColor(getColor(R.color.text_secondary))
+                    activeChip?.background = chipNormalBg?.constantState?.newDrawable()?.mutate()
+                    activeChip?.setTextColor(textColorSecondary)
                     activeChip = clicked
-                    clicked.setBackgroundResource(R.drawable.bg_search_chip_selected)
-                    clicked.setTextColor(getColor(R.color.text_primary))
+                    clicked.background = chipSelectedBg?.constantState?.newDrawable()?.mutate()
+                    clicked.setTextColor(textColorPrimary)
                     activeFilter = opt.extensions
                     runSearch()
                 }
@@ -228,8 +308,8 @@ class SearchActivity : AppCompatActivity() {
         chips.forEach { binding.filterChips.addView(it) }
         activeFilter = null
         activeChip = chips[0]
-        chips[0].setBackgroundResource(R.drawable.bg_search_chip_selected)
-        chips[0].setTextColor(getColor(R.color.text_primary))
+        chips[0].background = chipSelectedBg?.constantState?.newDrawable()?.mutate()
+        chips[0].setTextColor(textColorPrimary)
     }
 
     private fun runSearch() {
@@ -306,6 +386,7 @@ class SearchResultsAdapter(
 ) : RecyclerView.Adapter<SearchResultsAdapter.VH>() {
 
     inner class VH(view: View) : RecyclerView.ViewHolder(view) {
+        val rowCard: android.view.View = view.findViewById(R.id.itemRowCard)
         val ivIcon: android.widget.ImageView = view.findViewById(R.id.ivFileIcon)
         val iconContainer: android.widget.FrameLayout = view.findViewById(R.id.iconContainer)
         val tvName: TextView = view.findViewById(R.id.tvFileName)
@@ -358,7 +439,7 @@ class SearchResultsAdapter(
             holder.tvBadge.visibility = View.GONE
         }
 
-        holder.itemView.setOnClickListener { onClick(file) }
+        holder.rowCard.setOnClickListener { onClick(file) }
     }
 
     override fun getItemCount() = items.size

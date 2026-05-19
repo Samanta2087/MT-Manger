@@ -37,16 +37,15 @@
                 android:layout_marginEnd="3dp">
 
                 <FrameLayout
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:background="@drawable/bg_folder_container"
                     android:layout_marginEnd="8dp">
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_folder_flat"
-                        android:tint="@color/file_folder" />
+                        android:src="@drawable/ic_stats_folder" />
                 </FrameLayout>
 
                 <LinearLayout
@@ -83,16 +82,15 @@
                 android:layout_marginStart="3dp">
 
                 <FrameLayout
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:background="@drawable/bg_icon_container"
                     android:layout_marginEnd="8dp">
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_file_flat"
-                        android:tint="@color/text_badge_py" />
+                        android:src="@drawable/ic_stats_file" />
                 </FrameLayout>
 
                 <LinearLayout

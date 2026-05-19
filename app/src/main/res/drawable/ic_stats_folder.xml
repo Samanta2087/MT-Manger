@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+    <!-- Back folder body (dark blue) -->
+    <path
+        android:fillColor="#008CC7"
+        android:pathData="M26,27H6c-1.105,0-2-0.895-2-2V7c0-1.105,0.895-2,2-2h4.027c0.623,0,1.22,0.247,1.66,0.688
+            l0.624,0.624C12.753,6.753,13.35,7,13.973,7H26c1.105,0,2,0.895,2,2v16C28,26.105,27.105,27,26,27z"/>
+    <!-- Front folder body (light cyan-blue) -->
+    <path
+        android:fillColor="#00DCFF"
+        android:pathData="M27,27H5c-1.105,0-2-0.895-2-2V11c0-1.105,0.895-2,2-2h22c1.105,0,2,0.895,2,2v14C29,26.105,28.105,27,27,27z"/>
+</vector>

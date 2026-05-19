@@ -54,22 +54,17 @@ class FileAdapter(
         val item = getItem(position)
         val ctx  = holder.itemView.context
 
-        // ── Resolve theme attr: is chevron visible (light glass = true) ──
-        val showChevron = resolveThemeBool(ctx, R.attr.xyvionChevronVisible)
-        val isLight     = resolveThemeBool(ctx, R.attr.xyvionChevronVisible)
+        // ── Resolve theme attr: is light glass theme active ──
+        val isLightTheme    = resolveThemeBool(ctx, R.attr.xyvionChevronVisible)
+        val showChevron     = isLightTheme  // chevron visible only in light theme
+        val iconContainerBg = if (isLightTheme) android.R.color.transparent else R.drawable.bg_icon_container
 
-        // ──────────────────────────────────────────
-        // Icon & Container — Use real asset images where available
-        // ──────────────────────────────────────────
-        val dp = ctx.resources.displayMetrics.density
-        val folderIconPx  = (55 * dp).toInt()
-        val defaultIconPx = (36 * dp).toInt()
-
+        // ── Icon & Container pixel sizes ─────────────────────────────────────
+        val dp                 = ctx.resources.displayMetrics.density
+        val folderIconPx       = (55 * dp).toInt()
+        val defaultIconPx      = (36 * dp).toInt()
         val folderContainerPx  = (57 * dp).toInt()
         val defaultContainerPx = (44 * dp).toInt()
-
-        val isLightTheme = resolveThemeBool(ctx, R.attr.xyvionChevronVisible)
-        val iconContainerBg = if (isLightTheme) android.R.color.transparent else R.drawable.bg_icon_container
 
         if (item.isDirectory) {
             // Theme-aware folder icon

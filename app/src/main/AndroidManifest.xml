@@ -206,8 +206,28 @@
         <!-- ── DOCX Viewer ── -->
         <activity
             android:name=".ui.viewer.DocxViewerActivity"
-            android:exported="false"
-            android:label="XYvion – Document Viewer" />
+            android:exported="true"
+            android:label="XYvion – Document Viewer">
+
+            <!-- application/vnd.openxmlformats-officedocument.wordprocessingml.document -->
+            <intent-filter android:label="Open with XYvion">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </intent-filter>
+            <!-- content:// scheme (WhatsApp, Gmail, Drive share) -->
+            <intent-filter android:label="Open with XYvion">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </intent-filter>
+            <!-- file:// scheme -->
+            <intent-filter android:label="Open with XYvion">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="file" android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </intent-filter>
+        </activity>
 
         <!-- ── Search ── -->
         <activity

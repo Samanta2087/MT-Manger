@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- * ThemeManager – handles persisting and applying the two XYvion themes:
+ * ThemeManager – handles persisting and applying the two FYLOXEN themes:
  *   • DARK  : Theme.MTManagerLite  (deep space dark glass – default)
  *   • LIGHT : Theme.XYvion.LiquidGlass (ultra-premium frosted glass light)
  *

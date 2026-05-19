@@ -18,87 +18,174 @@
             android:orientation="vertical"
             android:paddingBottom="76dp">
 
-            <!-- ─── HEADER ─── -->
-            <LinearLayout
-                android:id="@+id/headerBar"
+            <!-- ─── HEADER (Reference-style floating pill) ─── -->
+            <FrameLayout
+                android:id="@+id/headerBarWrapper"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingEnd="16dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="6dp">
 
-                <!-- Left: Menu + Logo -->
+                <!-- Floating pill card -->
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:id="@+id/headerBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:background="@drawable/bg_topbar_pill"
+                    android:elevation="6dp">
 
+                    <!-- Left: Menu button -->
                     <ImageButton
                         android:id="@+id/btnMenu"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:padding="10dp"
-                        android:background="?attr/xyvionBgHeaderBtn"
+                        android:padding="11dp"
+                        android:background="@drawable/bg_topbar_icon_btn"
                         android:src="@drawable/ic_menu"
-                        android:tint="?attr/xyvionTextPrimary"
-                        android:contentDescription="Menu" />
+                        android:tint="#3D3E5C"
+                        android:contentDescription="Menu"
+                        android:layout_marginEnd="6dp" />
 
+                    <!-- Center: Logo + name block -->
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:clipChildren="false"
+                        android:paddingStart="2dp">
 
-                        <TextView
-                            android:id="@+id/tvAppTitle"
+                        <!-- F logo mark -->
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/ic_fyloxen_logo"
+                            android:scaleType="fitCenter"
+                            android:layout_gravity="center_vertical"
+                            android:contentDescription="Fyloxen logo" />
+
+                        <!-- App name + subtitle stacked -->
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="XYvion"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:letterSpacing="-0.04"
-                            android:fontFamily="sans-serif-black"
-                            android:maxLines="1" />
+                            android:layout_gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:gravity="start"
+                            android:clipChildren="false"
+                            android:layout_marginStart="8dp">
 
-                        <TextView
-                            android:id="@+id/tvAppSubtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="File Manager"
-                            android:textColor="?attr/xyvionTextSecondary"
-                            android:textSize="11sp"
-                            android:layout_marginTop="-2dp" />
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:padding="2dp">
+
+                                <!-- Subtle depth halo -->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="FYLOXEN"
+                                    android:textSize="22sp"
+                                    android:letterSpacing="0.10"
+                                    android:fontFamily="@font/cinzel"
+                                    android:textFontWeight="700"
+                                    android:textColor="#121212"
+                                    android:includeFontPadding="false"
+                                    android:maxLines="1"
+                                    android:ellipsize="none"
+                                    android:alpha="0.08"
+                                    android:shadowColor="#121212"
+                                    android:shadowDx="0"
+                                    android:shadowDy="0"
+                                    android:shadowRadius="4" />
+
+                                <!-- Slight depth offset -->
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="0.5dp"
+                                    android:text="FYLOXEN"
+                                    android:textSize="22sp"
+                                    android:letterSpacing="0.10"
+                                    android:fontFamily="@font/cinzel"
+                                    android:textFontWeight="700"
+                                    android:textColor="#0A0A0A"
+                                    android:includeFontPadding="false"
+                                    android:maxLines="1"
+                                    android:ellipsize="none"
+                                    android:alpha="0.20" />
+
+                                <!-- Main face -->
+                                <TextView
+                                    android:id="@+id/tvAppTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="FYLOXEN"
+                                    android:textSize="22sp"
+                                    android:letterSpacing="0.10"
+                                    android:fontFamily="@font/cinzel"
+                                    android:textFontWeight="700"
+                                    android:textColor="#121212"
+                                    android:includeFontPadding="false"
+                                    android:maxLines="1"
+                                    android:ellipsize="none" />
+
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/tvAppSubtitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="FILE MANAGER"
+                                android:textColor="#8A7D6A"
+                                android:textSize="10sp"
+                                android:letterSpacing="0.06"
+                                android:fontFamily="sans-serif-medium"
+                                android:includeFontPadding="false"
+                                android:layout_marginTop="1dp"
+                                android:shadowColor="#40FFFFFF"
+                                android:shadowDx="0"
+                                android:shadowDy="0"
+                                android:shadowRadius="1" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
+
+                    <!-- Right: Search button -->
+                    <ImageButton
+                        android:id="@+id/btnSearch"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:padding="11dp"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_topbar_icon_btn"
+                        android:src="@drawable/ic_search"
+                        android:tint="#3D3E5C"
+                        android:contentDescription="Search" />
+
+                    <!-- Right: More options button -->
+                    <ImageButton
+                        android:id="@+id/btnMore"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:padding="11dp"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_topbar_icon_btn"
+                        android:src="@drawable/ic_more_vert"
+                        android:tint="#3D3E5C"
+                        android:contentDescription="More options" />
+
                 </LinearLayout>
 
-                <!-- Right: Action buttons -->
-                <ImageButton
-                    android:id="@+id/btnSearch"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:padding="10dp"
-                    android:layout_marginStart="6dp"
-                    android:background="?attr/xyvionBgHeaderBtn"
-                    android:src="@drawable/ic_search"
-                    android:tint="?attr/xyvionTextPrimary"
-                    android:contentDescription="Search" />
-
-                <ImageButton
-                    android:id="@+id/btnMore"
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:padding="10dp"
-                    android:layout_marginStart="6dp"
-                    android:background="?attr/xyvionBgHeaderBtn"
-                    android:src="@drawable/ic_more_vert"
-                    android:tint="?attr/xyvionTextPrimary"
-                    android:contentDescription="More options" />
-
-            </LinearLayout>
+            </FrameLayout>
 
             <!-- ─── QUICK ACCESS CARD ─── -->
             <LinearLayout
@@ -541,9 +628,9 @@
                 android:layout_marginEnd="6dp"
                 android:background="@drawable/lg_bg_toolbar_divider" />
 
-            <!-- Swap -->
+            <!-- Home -->
             <LinearLayout
-                android:id="@+id/btnSwap"
+                android:id="@+id/btnHome"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -558,12 +645,12 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/ic_swap"
+                    android:src="@drawable/ic_home"
                     android:tint="?attr/xyvionNavIconTint" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Swap"
+                    android:text="Home"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:textColor="#94A3B8"
@@ -572,6 +659,7 @@
                     android:layout_marginTop="3dp"
                     android:letterSpacing="0.03" />
             </LinearLayout>
+
 
             <!-- Sort (with badge) -->
             <FrameLayout

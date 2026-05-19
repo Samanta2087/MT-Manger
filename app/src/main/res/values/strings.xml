@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">XYvion</string>
+    <string name="app_name">FYLOXEN</string>
     <string name="storage_permission_title">Storage Permission Required</string>
-    <string name="storage_permission_msg">XYvion needs access to your files to browse and edit them.</string>
+    <string name="storage_permission_msg">FYLOXEN needs access to your files to browse and edit them.</string>
     <string name="grant_permission">Grant Permission</string>
     <string name="new_file">New File</string>
     <string name="new_folder">New Folder</string>

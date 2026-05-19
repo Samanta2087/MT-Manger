@@ -19,6 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mtmanager.lite.R
 import com.mtmanager.lite.adapter.FileAdapter
@@ -60,6 +61,12 @@ class FilePaneFragment : Fragment() {
     private var allFiles   = listOf<FileItem>()
     private var fileToHighlight: File? = null
     private var loadJob: Job? = null   // tracks the active file-load so we can cancel stale loads
+
+    // ── Scroll position memory ────────────────────────────────────────────────
+    // Maps absolute folder path → (firstVisibleItemPosition, pixelOffset)
+    // Saved before leaving a folder; restored after submitList() on back/forward.
+    private val scrollPositionCache = HashMap<String, Pair<Int, Int>>()
+    private var pendingScrollRestore: String? = null   // path whose position should be restored next
 
     fun isShowingHidden(): Boolean = showHidden
 
@@ -205,7 +212,12 @@ class FilePaneFragment : Fragment() {
 
     fun navigateTo(path: File, addToHistory: Boolean = true) {
         if (!path.exists() || !path.isDirectory) return
-        if (addToHistory) navHistory.addLast(currentPath)
+        // Save scroll position of the folder we are LEAVING before navigating away
+        if (addToHistory) {
+            saveScrollPosition(currentPath.absolutePath)
+            navHistory.addLast(currentPath)
+        }
+        pendingScrollRestore = null   // forward nav: don't restore (new folder starts at top)
         navFuture.clear()
         currentPath = path
         callback?.onPaneActivated(this)
@@ -216,6 +228,7 @@ class FilePaneFragment : Fragment() {
         if (navHistory.isEmpty()) return false
         navFuture.addFirst(currentPath)
         currentPath = navHistory.removeLast()
+        pendingScrollRestore = currentPath.absolutePath   // restore where we were in this folder
         loadFiles(animate = true)
         return true
     }
@@ -224,6 +237,7 @@ class FilePaneFragment : Fragment() {
         if (navFuture.isEmpty()) return false
         navHistory.addLast(currentPath)
         currentPath = navFuture.removeFirst()
+        pendingScrollRestore = currentPath.absolutePath   // restore where we were in this folder
         loadFiles(animate = true)
         return true
     }
@@ -294,28 +308,47 @@ class FilePaneFragment : Fragment() {
     private fun applyFilter() {
         val filtered = if (filterQuery.isBlank()) allFiles
         else allFiles.filter { it.name.contains(filterQuery, ignoreCase = true) }
-        
+
         fileAdapter.submitList(filtered.toList()) {
+            // ── Priority 1: highlight a specific file (from search / locate) ──
             fileToHighlight?.let { target ->
                 val index = filtered.indexOfFirst { it.file.absolutePath == target.absolutePath }
                 if (index != -1) {
                     binding.fileListRv.scrollToPosition(index)
                     if (!fileAdapter.isMultiSelectMode) fileAdapter.enterMultiSelectMode()
                     val item = filtered[index]
-                    if (item !in fileAdapter.getSelectedItems()) {
-                        fileAdapter.toggleSelection(item)
-                    }
+                    if (item !in fileAdapter.getSelectedItems()) fileAdapter.toggleSelection(item)
                     updateSelectionBar()
                 }
                 fileToHighlight = null
+                pendingScrollRestore = null   // highlight wins over scroll restore
+                return@submitList
+            }
+
+            // ── Priority 2: restore saved scroll position (Back / Forward nav) ──
+            val restorePath = pendingScrollRestore
+            if (restorePath != null) {
+                pendingScrollRestore = null
+                val (pos, offset) = scrollPositionCache[restorePath] ?: return@submitList
+                (binding.fileListRv.layoutManager as? LinearLayoutManager)
+                    ?.scrollToPositionWithOffset(pos, offset)
             }
         }
 
         val isEmpty = filtered.isEmpty()
         binding.emptyState.visibility  = if (isEmpty) View.VISIBLE else View.GONE
         binding.swipeRefresh.visibility = if (isEmpty) View.GONE   else View.VISIBLE
-        // If folder is empty the swipeRefresh is hidden, so stop its spinner manually
         if (isEmpty) binding.swipeRefresh.isRefreshing = false
+    }
+
+    /** Captures the current scroll position and stores it keyed by [pathKey]. */
+    private fun saveScrollPosition(pathKey: String) {
+        val lm  = binding.fileListRv.layoutManager as? LinearLayoutManager ?: return
+        val pos = lm.findFirstVisibleItemPosition()
+        if (pos == RecyclerView.NO_POSITION) return
+        val view   = lm.findViewByPosition(pos) ?: return
+        val offset = view.top - binding.fileListRv.paddingTop
+        scrollPositionCache[pathKey] = Pair(pos, offset)
     }
 
     private fun updateStats() {

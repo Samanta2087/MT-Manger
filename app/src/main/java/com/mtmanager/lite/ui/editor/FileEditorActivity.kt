@@ -65,6 +65,9 @@ class FileEditorActivity : AppCompatActivity() {
     private var textActionPopup: PopupWindow? = null
     private lateinit var popupView: View
 
+    // Prevents popup from being dismissed during model updates (cut/paste/select-all)
+    private var suppressPopupDismiss = false
+
     // Debounce handler — prevents the ongoing long-press touch from
     // immediately dismissing the popup the moment it appears.
     private val selectionHandler = Handler(Looper.getMainLooper())
@@ -151,7 +154,8 @@ class FileEditorActivity : AppCompatActivity() {
             lines         = mutableListOf(""),
             onChanged     = { onEditorContentChanged() },
             onCursorMoved = { line, col -> updateCursorPosition(line, col) },
-            onSelectionChanged = { hasSelection -> onSelectionChanged(hasSelection) }
+            onSelectionChanged = { hasSelection -> onSelectionChanged(hasSelection) },
+            onLongPress   = { showTextActionBar() }
         ).apply {
             isReadOnly = this@FileEditorActivity.isReadOnly
             fontSize   = this@FileEditorActivity.fontSize
@@ -185,18 +189,26 @@ class FileEditorActivity : AppCompatActivity() {
 
     // ── Selection show/hide (debounced) ──────────────────────────────────────────
     private fun onSelectionChanged(hasSelection: Boolean) {
+        // In large-file mode lineAdapter is never initialized — guard required
+        if (!isLargeMode) {
+            if (lineAdapter.isSelectAllActive) return
+        }
+        if (suppressPopupDismiss) return
+
         // Always cancel any pending show first
         pendingShow?.let { selectionHandler.removeCallbacks(it) }
         pendingShow = null
 
         if (hasSelection) {
-            // Delay 200ms: lets the long-press touch gesture fully finish
-            // before showing the popup so the ongoing finger-up event
-            // doesn't accidentally dismiss it.
             val r = Runnable {
                 pendingShow = null
-                val et = lineAdapter.lastFocusedEdit ?: return@Runnable
-                if (et.selectionStart != et.selectionEnd) showTextActionBar()
+                if (!isLargeMode) {
+                    val et = lineAdapter.lastFocusedEdit ?: return@Runnable
+                    if (et.selectionStart != et.selectionEnd) showTextActionBar()
+                } else {
+                    val et = streamAdapter?.lastFocusedEdit ?: return@Runnable
+                    if (et.selectionStart != et.selectionEnd) showTextActionBar()
+                }
             }
             pendingShow = r
             selectionHandler.postDelayed(r, 300)
@@ -276,8 +288,38 @@ class FileEditorActivity : AppCompatActivity() {
     }
 
     private fun hideTextActionBar() {
+        // Keep popup alive while select-all mode is active OR during model updates
+        if (!isLargeMode && (lineAdapter.isSelectAllActive || suppressPopupDismiss)) return
+        if (isLargeMode && suppressPopupDismiss) return
+        try {
+            textActionPopup?.dismiss()
+        } catch (_: Exception) { /* activity may be finishing */ }
+        textActionPopup = null
+    }
+
+    /** Force-close the popup regardless of select-all state (used by select-all actions). */
+    private fun forceHideTextActionBar() {
         textActionPopup?.dismiss()
         textActionPopup = null
+    }
+
+    /** Gathers (lineIndex, selStart..selEnd) pairs for visible selections across rows. */
+    private fun gatherSelections(): List<Pair<Int, Pair<Int, Int>>> {
+        val result = mutableListOf<Pair<Int, Pair<Int, Int>>>()
+        val rv = binding.rvEditor
+        for (i in 0 until rv.childCount) {
+            val vh = rv.getChildViewHolder(rv.getChildAt(i)) as? LineAdapter.LineVH ?: continue
+            val pos = vh.bindingAdapterPosition
+            if (pos == androidx.recyclerview.widget.RecyclerView.NO_POSITION) continue
+            val et = vh.b.etLine
+            val textLen = et.text?.length ?: 0
+            val s = et.selectionStart
+            val e = et.selectionEnd
+            if (s >= 0 && e > s && s < textLen && e <= textLen) {
+                result.add(Pair(pos, Pair(s, e)))
+            }
+        }
+        return result
     }
 
     // ── Text action bar (floating popup) ───────────────────────────────────────
@@ -297,14 +339,51 @@ class FileEditorActivity : AppCompatActivity() {
         }
 
         popupView.findViewById<ImageButton>(R.id.btnActSelectAll).setOnClickListener {
+            // Activate visual select-all highlight across all rows
             lineAdapter.selectAll()
-            val allText = lineAdapter.getContent()
-            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            clipboard.setPrimaryClip(ClipData.newPlainText("all", allText))
-            Toast.makeText(this, "Selected all • Copied to clipboard", Toast.LENGTH_SHORT).show()
+            // Keep the popup pinned at center-top so Cut/Copy/Paste remain accessible
+            showTextActionBar()
         }
 
         popupView.findViewById<ImageButton>(R.id.btnActCut).setOnClickListener {
+            if (lineAdapter.isSelectAllActive) {
+                // Cut entire file content
+                val allText = lineAdapter.getContent()
+                clipboard.setPrimaryClip(ClipData.newPlainText("cut_all", allText))
+                lineAdapter.lines.clear()
+                lineAdapter.lines.add("")
+                suppressPopupDismiss = true
+                lineAdapter.isSelectAllActive = false
+                lineAdapter.notifyDataSetChanged()
+                suppressPopupDismiss = false
+                onEditorContentChanged()
+                // Re-show popup so Paste remains accessible
+                binding.root.postDelayed({ showTextActionBar() }, 100)
+                Toast.makeText(this, "All text cut", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            // Multi-range cut: gather selected ranges from all rows
+            val selRanges = gatherSelections()
+            if (selRanges.isNotEmpty()) {
+                val sb = StringBuilder()
+                for ((idx, r) in selRanges.withIndex()) {
+                    if (idx > 0) sb.append('\n')
+                    sb.append(lineAdapter.lines[selRanges[idx].first].substring(r.second.first, r.second.second))
+                }
+                clipboard.setPrimaryClip(ClipData.newPlainText("cut", sb.toString()))
+                // Delete in reverse order to preserve indices
+                for (i in selRanges.indices.reversed()) {
+                    val (lineIdx, range) = selRanges[i]
+                    val line = lineAdapter.lines[lineIdx]
+                    lineAdapter.lines[lineIdx] = line.substring(0, range.first) + line.substring(range.second)
+                }
+                // Merge consecutive cut lines if they're now adjacent fragments
+                lineAdapter.isSelectAllActive = false
+                lineAdapter.notifyDataSetChanged()
+                forceHideTextActionBar()
+                onEditorContentChanged()
+                return@setOnClickListener
+            }
             val et = lineAdapter.lastFocusedEdit ?: return@setOnClickListener
             val s = et.selectionStart; val e = et.selectionEnd
             if (s >= e) return@setOnClickListener
@@ -315,6 +394,28 @@ class FileEditorActivity : AppCompatActivity() {
         }
 
         popupView.findViewById<ImageButton>(R.id.btnActCopy).setOnClickListener {
+            if (lineAdapter.isSelectAllActive) {
+                // Copy entire file content
+                val allText = lineAdapter.getContent()
+                clipboard.setPrimaryClip(ClipData.newPlainText("copy_all", allText))
+                lineAdapter.clearSelectAll()
+                forceHideTextActionBar()
+                Toast.makeText(this, "All text copied", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            // Check for custom multi-line selection
+            val selRanges = gatherSelections()
+            if (selRanges.isNotEmpty()) {
+                val sb = StringBuilder()
+                for ((idx, r) in selRanges.withIndex()) {
+                    if (idx > 0) sb.append('\n')
+                    sb.append(lineAdapter.lines[selRanges[idx].first].substring(r.second.first, r.second.second))
+                }
+                clipboard.setPrimaryClip(ClipData.newPlainText("copy", sb.toString()))
+                hideTextActionBar()
+                Toast.makeText(this, "Copied", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val et = lineAdapter.lastFocusedEdit ?: return@setOnClickListener
             val s = et.selectionStart; val e = et.selectionEnd
             if (s >= e) return@setOnClickListener
@@ -324,13 +425,42 @@ class FileEditorActivity : AppCompatActivity() {
         }
 
         popupView.findViewById<ImageButton>(R.id.btnActPaste).setOnClickListener {
+            if (lineAdapter.isSelectAllActive) {
+                // Replace entire file content with clipboard
+                val clip = clipboard.primaryClip ?: run {
+                    Toast.makeText(this, "Clipboard is empty", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (clip.itemCount == 0) return@setOnClickListener
+                val text = clip.getItemAt(0).coerceToText(this).toString()
+                val newLines = text.split("\n").toMutableList()
+                lineAdapter.lines.clear()
+                lineAdapter.lines.addAll(if (newLines.isEmpty()) mutableListOf("") else newLines)
+                suppressPopupDismiss = true
+                lineAdapter.isSelectAllActive = false
+                lineAdapter.notifyDataSetChanged()
+                suppressPopupDismiss = false
+                onEditorContentChanged()
+                forceHideTextActionBar()
+                Toast.makeText(this, "Pasted", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val et = lineAdapter.lastFocusedEdit ?: return@setOnClickListener
+            val pos = lineAdapter.lastFocusedLine
             val clip = clipboard.primaryClip ?: return@setOnClickListener
             if (clip.itemCount == 0) return@setOnClickListener
             val text  = clip.getItemAt(0).coerceToText(this).toString()
             val start = et.selectionStart.coerceAtLeast(0)
             val end   = et.selectionEnd.coerceAtLeast(start)
-            et.text?.replace(start, end, text)
+            if (pos < 0 || pos >= lineAdapter.lines.size) {
+                et.text?.replace(start, end, text)
+            } else if (!text.contains('\n')) {
+                // Single-line paste: simple in-place replacement
+                et.text?.replace(start, end, text)
+            } else {
+                // Multi-line paste: insert directly into model
+                lineAdapter.insertMultiLine(pos, text, start, end)
+            }
             hideTextActionBar()
             Toast.makeText(this, "Pasted", Toast.LENGTH_SHORT).show()
         }

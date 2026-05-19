@@ -4,22 +4,15 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.mtmanager.lite.databinding.ItemEditorLineBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/**
- * RecyclerView adapter that renders lines from [LargeFileEditorEngine] on demand.
- *
- * - Each ViewHolder launches a coroutine to fetch its line from the engine (IO thread).
- * - The coroutine is cancelled when the ViewHolder is recycled (prevents stale writes).
- * - Content changes are written back to the engine's patchMap via a TextWatcher.
- */
 class StreamingLineAdapter(
     private val engine: LargeFileEditorEngine,
     private val scope: CoroutineScope,
@@ -30,16 +23,30 @@ class StreamingLineAdapter(
     private val onSelectionChanged: (hasSelection: Boolean) -> Unit
 ) : RecyclerView.Adapter<StreamingLineAdapter.LineVH>() {
 
-    var lastFocusedEdit: EditText? = null
+    var lastFocusedEdit: SelectionEditText? = null
 
     inner class LineVH(val b: ItemEditorLineBinding) : RecyclerView.ViewHolder(b.root) {
-        var lineNum: Int = -1
+        /** The position this VH is currently bound to. Written only on the main thread. */
+        @Volatile var boundPosition: Int = RecyclerView.NO_ID.toInt()
         var loadJob: Job? = null
         var watcher: TextWatcher? = null
 
         fun detachWatcher() {
             watcher?.let { b.etLine.removeTextChangedListener(it) }
             watcher = null
+        }
+
+        /** Cancel the in-flight load and reset the view to a safe blank state. */
+        fun cancelLoad() {
+            loadJob?.cancel()
+            loadJob = null
+            detachWatcher()
+            // Clear listeners that reference the old position
+            b.etLine.onPaste = null
+            b.etLine.onSelectionChangedListener = null
+            b.etLine.setOnFocusChangeListener(null)
+            b.etLine.setOnClickListener(null)
+            b.etLine.setOnLongClickListener(null)
         }
     }
 
@@ -51,33 +58,44 @@ class StreamingLineAdapter(
     }
 
     override fun onBindViewHolder(holder: LineVH, position: Int) {
-        // Cancel any previous load / watcher for this ViewHolder
-        holder.loadJob?.cancel()
-        holder.detachWatcher()
-        holder.lineNum = position
+        // ── 1. Cancel any previous load for this VH BEFORE updating position ──
+        holder.cancelLoad()
 
+        // ── 2. Stamp the new position atomically ──────────────────────────────
+        holder.boundPosition = position
+
+        // ── 3. Static parts ───────────────────────────────────────────────────
         holder.b.tvLineNum.text     = (position + 1).toString()
         holder.b.tvLineNum.textSize = fontSize
         holder.b.etLine.textSize    = fontSize
         holder.b.etLine.isEnabled   = !isReadOnly
-        holder.b.etLine.setText("…")   // placeholder while loading
+        holder.b.etLine.setText("…")
 
+        // ── 4. Async load — snapshot 'position' into local val for closure ────
+        val targetPos = position
         holder.loadJob = scope.launch {
-            val content = withContext(Dispatchers.IO) { engine.getLine(position) }
-            // Only apply if this ViewHolder hasn't been recycled to a different position
-            if (holder.lineNum == position) {
+            // Read on IO thread; engine.getLine is @Synchronized so safe
+            val content = withContext(Dispatchers.IO) {
+                try { engine.getLine(targetPos) } catch (e: Exception) { "" }
+            }
+            // Only apply if the job wasn't cancelled AND the VH still shows this position
+            if (isActive && holder.boundPosition == targetPos) {
                 holder.b.etLine.setText(content)
-                attachWatcher(holder, position)
+                attachWatcher(holder, targetPos)
             }
         }
     }
 
     private fun attachWatcher(holder: LineVH, position: Int) {
+        // Guard: only attach if VH still shows this position (fast-scroll safety)
+        if (holder.boundPosition != position) return
+
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, st: Int, c: Int, a: Int) {}
             override fun onTextChanged(s: CharSequence?, st: Int, b: Int, c: Int) {}
             override fun afterTextChanged(s: Editable?) {
-                if (holder.lineNum == position) {
+                // Check position again inside the callback — VH may have been recycled
+                if (holder.boundPosition == position) {
                     engine.setLine(position, s?.toString() ?: "")
                     onChanged()
                 }
@@ -86,32 +104,57 @@ class StreamingLineAdapter(
         holder.watcher = watcher
         holder.b.etLine.addTextChangedListener(watcher)
 
+        holder.b.etLine.onPaste = { pastedText ->
+            if (holder.boundPosition == position) {
+                val parts = pastedText.split("\n")
+                for ((idx, part) in parts.withIndex()) {
+                    engine.setLine(position + idx, part)
+                }
+                holder.b.etLine.removeTextChangedListener(watcher)
+                holder.b.etLine.setText(parts[0])
+                holder.b.etLine.addTextChangedListener(watcher)
+                onChanged()
+            }
+            true
+        }
+
         holder.b.etLine.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
+            if (hasFocus && holder.boundPosition == position) {
                 lastFocusedEdit = holder.b.etLine
                 onCursorMoved(position, holder.b.etLine.selectionStart)
             }
         }
         holder.b.etLine.setOnClickListener {
-            onCursorMoved(position, holder.b.etLine.selectionStart)
+            if (holder.boundPosition == position)
+                onCursorMoved(position, holder.b.etLine.selectionStart)
         }
         holder.b.etLine.setOnLongClickListener {
-            // Notify after selection established (short delay)
-            holder.b.etLine.postDelayed({
-                val hasSel = holder.b.etLine.selectionStart != holder.b.etLine.selectionEnd
-                onSelectionChanged(hasSel)
-            }, 150)
+            if (holder.boundPosition == position) {
+                holder.b.etLine.postDelayed({
+                    if (holder.boundPosition == position) {
+                        val hasSel = holder.b.etLine.selectionStart != holder.b.etLine.selectionEnd
+                        onSelectionChanged(hasSel)
+                    }
+                }, 150)
+            }
             false
+        }
+        holder.b.etLine.onSelectionChangedListener = { hasSelection ->
+            if (holder.boundPosition == position) onSelectionChanged(hasSelection)
         }
     }
 
     override fun onViewRecycled(holder: LineVH) {
-        holder.loadJob?.cancel()
-        holder.loadJob = null
-        holder.detachWatcher()
+        // Mark as unbound first so any in-flight callback sees an invalid position
+        holder.boundPosition = RecyclerView.NO_ID.toInt()
+        holder.cancelLoad()
     }
 
-    /** Retrieve the text currently shown in a specific on-screen ViewHolder (for copy/paste). */
+    /** Called when VH goes off-screen. Same as recycled — kill load immediately. */
+    override fun onViewDetachedFromWindow(holder: LineVH) {
+        holder.loadJob?.cancel()
+    }
+
     fun getContent(): String = buildString {
         for (i in 0 until engine.lineCount) {
             if (i > 0) append('\n')

@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- Toolbar — dark, like Sheets top bar -->
+    <!-- Toolbar — Google Sheets green -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
@@ -50,7 +50,18 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Column-letter header row (scrolls horizontally only) -->
+    <!-- Loading spinner — visible until data is ready -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Frozen column-letter header (A, B, C…) — scrolls horizontally only -->
     <HorizontalScrollView
         android:id="@+id/hsvHeader"
         android:layout_width="match_parent"
@@ -65,33 +76,32 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <!-- Thin separator -->
+    <!-- Thin separator line -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#BDBDBD" />
 
-    <!-- Data area: vertical scroll wrapping horizontal scroll -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScroll"
+    <!--
+        Data area: HorizontalScrollView wraps the RecyclerView so rows can
+        scroll both horizontally (wide tables) and vertically (many rows).
+        RecyclerView only instantiates ~15 visible rows at a time.
+    -->
+    <HorizontalScrollView
+        android:id="@+id/hsvContent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:scrollbars="horizontal"
+        android:overScrollMode="never">
 
-        <HorizontalScrollView
-            android:id="@+id/hsvContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="horizontal"
-            android:overScrollMode="never">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRows"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never" />
 
-            <LinearLayout
-                android:id="@+id/tableContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-
-        </HorizontalScrollView>
-    </androidx.core.widget.NestedScrollView>
+    </HorizontalScrollView>
 
 </LinearLayout>
