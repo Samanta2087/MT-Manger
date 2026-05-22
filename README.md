@@ -9,7 +9,8 @@
 [![Android](https://img.shields.io/badge/Platform-Android%208.0%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://android.com)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Min SDK](https://img.shields.io/badge/Min%20SDK-26-orange?style=for-the-badge)](https://developer.android.com)
-[![ExoPlayer](https://img.shields.io/badge/Media-ExoPlayer%20Media3%201.3.1-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://developer.android.com/media/media3)
+[![Target SDK](https://img.shields.io/badge/Target%20SDK-35-blue?style=for-the-badge)](https://developer.android.com)
+[![ExoPlayer](https://img.shields.io/badge/Media-ExoPlayer%20Media3%201.4.1-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://developer.android.com/media/media3)
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 > *Browse. Edit. View. Play. All in one app — without limits.*
@@ -20,7 +21,7 @@
 
 ## 🌟 Overview
 
-**FYLOXEN** is a premium Android file manager built from the ground up with performance, beauty, and functionality at its core. From browsing your storage in a dual-pane layout to editing a 2 GB log file without a single crash — FYLOXEN handles it all.
+**FYLOXEN** is a premium Android file manager built from the ground up with performance, beauty, and functionality at its core. From browsing your storage in a clean, modern layout to editing a 2 GB log file without a single crash — FYLOXEN handles it all.
 
 It replaces the need for 5+ separate apps with a single, unified experience:
 
@@ -40,7 +41,7 @@ It replaces the need for 5+ separate apps with a single, unified experience:
 
 ### 📁 File Management
 
-- **Dual-Pane Layout** — Browse two directories side-by-side simultaneously
+- **Clean Single-Pane Layout** — Premium light UI with high-contrast white cards on a neutral background
 - **Full File Operations** — Copy, Cut, Paste, Rename, Delete, Move, Share
 - **Multi-Select** — Long-press any file to enter selection mode; select all or individually
 - **Visual Selection Bar** — Contextual action bar appears on multi-select with item count
@@ -58,18 +59,47 @@ It replaces the need for 5+ separate apps with a single, unified experience:
 
 ---
 
-### 🎨 Themes — Liquid Glass Design System
+### 🎨 Design System — Liquid Glass
 
-FYLOXEN ships with **two premium themes**, switchable at runtime without restarting the app:
+FYLOXEN features a hand-crafted **Liquid Glass Design System** with two premium themes, switchable at runtime:
 
 | Theme | Description |
 |---|---|
 | 🌑 **Dark Glass** *(default)* | Deep space dark background with frosted glass cards, neon accent colors |
-| 🌕 **Liquid Glass Light** | Ultra-premium frosted light glass, sky-blue gradients, soft shadows |
+| 🌕 **Liquid Glass Light** | Premium light UI — neutral grey background, high-contrast white section cards, clean typography |
 
+**Light theme highlights:**
+- `#ECEEF6` neutral grey background makes white section cards pop distinctly
+- Clean white `#FFFFFF` section cards with single thin drop shadow
+- Near-transparent `#FAFBFF` folder row tiles — visible but don't compete with section cards
+- icons8-style cyan/teal folder icon with exact SVG gradients (`#00DCFF → #00BFFF → #00A8E0`)
+- Extra vertical breathing room (18dp section padding, 68dp min row height)
+
+**Theme persistence:**
 - Theme is **persisted across app restarts** via `SharedPreferences`
 - Toggle via the menu — applies instantly via `Activity.recreate()`
 - All Activities (editor, viewers, bottom sheets) apply the correct theme in `onCreate()`
+
+---
+
+### 🎬 Smooth Navigation Animations
+
+FYLOXEN ships with a full set of custom navigation animations for a premium, spatial feel:
+
+| Action | Animation |
+|---|---|
+| Open folder | List fades in + slides up from below (28dp, 300ms) |
+| Navigate back | List fades in + slides down from above (28dp, 300ms) |
+| Open file viewer | Screen slides in from right + fade (320ms) |
+| Close file viewer | Screen slides back to right + fade (320ms) |
+
+All animations use `DecelerateInterpolator(2.5f)` or `decelerate_quint` for a natural, premium feel.
+
+**Animation files:**
+- `nav_enter.xml` — forward enter (slide from right, 40%)
+- `nav_exit.xml` — forward exit (slide to left, 25%)
+- `nav_pop_enter.xml` — back enter (slide from left, 25%)
+- `nav_pop_exit.xml` — back exit (slide to right, 40%)
 
 ---
 
@@ -94,7 +124,7 @@ FYLOXEN ships with **two premium themes**, switchable at runtime without restart
 
 ### 🎬 Video Player
 
-- **Powered by ExoPlayer (Media3)** — Industry-standard, Google-maintained player
+- **Powered by ExoPlayer (Media3 1.4.1)** — Industry-standard, Google-maintained player
 - **Universal Codec Support** — MP4, MKV, AVI, WebM, MOV and more
 - **Auto Aspect Ratio** — Videos always fill the screen correctly
 - **Audio-Only Detection** — MP4 files without a video track show a music UI automatically
@@ -187,6 +217,20 @@ FYLOXEN ships with **two premium themes**, switchable at runtime without restart
 
 ---
 
+### 📊 Analytics — Zero-UI-Impact
+
+FYLOXEN includes a lightweight, privacy-respecting analytics client (`AnalyticsManager`):
+
+- **Single daemon thread** at `THREAD_PRIORITY_LOWEST` — OS never prefers it over the UI thread
+- **Bounded 50-event queue** — silently drops events if the server is down
+- **200 ms gap** between consecutive HTTP calls — prevents CPU burst on startup
+- **3-second timeout** — dead server never blocks anything
+- **Connectivity pre-check** — skips HTTP entirely if no network available
+- **Tracks:** App opens, feature usage, and crash reports (with stack traces)
+- **Crash handler** — installs a global `UncaughtExceptionHandler` for best-effort crash reporting
+
+---
+
 ## 🚀 Universal "Open With" Support
 
 FYLOXEN registers itself for every major file type. When any app shares a file, FYLOXEN appears in the Android share sheet:
@@ -209,16 +253,16 @@ Works with **WhatsApp**, **Gmail**, **Google Drive**, **Telegram**, **Files by G
 ## 🏗️ Architecture
 
 ```
-FYLOXEN (com.mtmanager.lite)
+FYLOXEN (com.fyloxen.app)
 ├── ui/
-│   ├── MainActivity.kt              ← Dual-pane host · intent router · theme toggle · breadcrumb
+│   ├── MainActivity.kt              ← Single-pane host · intent router · theme toggle · breadcrumb · animations
 │   ├── pane/
-│   │   ├── FilePaneFragment.kt      ← File list · back/forward nav · multi-select · ZIP extract · Move dialog
+│   │   ├── FilePaneFragment.kt      ← File list · back/forward nav · multi-select · ZIP extract · Move dialog · smooth list animations
 │   │   ├── FileClipboard.kt         ← Global singleton clipboard (copy/cut state)
 │   │   └── BreadcrumbAdapter.kt     ← Horizontal scrollable path breadcrumb strip
 │   ├── viewer/
 │   │   ├── PdfViewerActivity.kt     ← pdfium-android renderer · zoom · password dialog
-│   │   ├── VideoPlayerActivity.kt   ← ExoPlayer Media3 · audio-only auto-detect · immersive fullscreen
+│   │   ├── VideoPlayerActivity.kt   ← ExoPlayer Media3 1.4.1 · audio-only auto-detect · immersive fullscreen
 │   │   ├── AudioPlayerActivity.kt   ← MediaPlayer via FileDescriptor · animated gradient UI
 │   │   ├── ImageViewerActivity.kt   ← Custom ZoomableImageView · pinch-to-zoom · share
 │   │   ├── CsvViewerActivity.kt     ← Grid renderer · frozen header · XLSX/CSV/TSV
@@ -232,6 +276,11 @@ FYLOXEN (com.mtmanager.lite)
 │   │   └── SelectionEditText.kt     ← Custom EditText subclass for per-line text selection events
 │   └── search/
 │       └── SearchActivity.kt        ← Recursive filesystem search · SQLite index query
+├── adapter/
+│   └── FileAdapter.kt               ← RecyclerView adapter · folder/file binding · icon resolution · multi-select
+├── model/
+│   ├── FileItem.kt                  ← File wrapper model · MIME · formatted size/date
+│   └── SortOrder.kt                 ← Sort enum (Name/Size/Date/Type · Asc/Desc)
 └── utils/
     ├── FileUtils.kt                  ← Read/write · copy/move/delete · MIME map · formatSize
     ├── UriUtils.kt                   ← content:// → File path resolution (MediaStore + FileProvider)
@@ -240,7 +289,8 @@ FYLOXEN (com.mtmanager.lite)
     ├── SyntaxHighlighter.kt          ← Regex-based live syntax coloring (8 languages)
     ├── SearchIndex.kt                ← SQLite-backed file index · background rebuild · cancellable scan
     ├── XlsxParser.kt                 ← Native XLSX reader (ZIP + XML, no external deps)
-    └── ZipUtils.kt                   ← zip4j wrapper · isEncrypted · extract with password
+    ├── ZipUtils.kt                   ← zip4j wrapper · isEncrypted · extract with password
+    └── AnalyticsManager.kt           ← Zero-UI-impact analytics · daemon thread · bounded queue · crash reporter
 ```
 
 ---
@@ -275,8 +325,8 @@ Save  →  stream to temp file  →  atomic rename  →  index rebuild
 |---|---|
 | Language | **Kotlin** |
 | UI | **XML Layouts + ViewBinding** |
-| Async | **Kotlin Coroutines + lifecycleScope** |
-| Video | **AndroidX Media3 / ExoPlayer 1.3.1** |
+| Async | **Kotlin Coroutines 1.9.0 + lifecycleScope** |
+| Video | **AndroidX Media3 / ExoPlayer 1.4.1** |
 | PDF | **pdfium-android 1.9.0** |
 | ZIP (password) | **zip4j 2.11.5** |
 | DOCX | **Native (ZipFile + XmlPullParser + WebView)** |
@@ -284,7 +334,29 @@ Save  →  stream to temp file  →  atomic rename  →  index rebuild
 | Syntax Highlight | **Custom SyntaxHighlighter (SpannableString + Regex)** |
 | Search Index | **SQLite (via Android SQLiteDatabase)** |
 | File Sharing | **androidx.core.content.FileProvider** |
-| Design | **Material Components 3 + Custom Liquid Glass Themes** |
+| Design | **Material Components 3 1.12.0 + Custom Liquid Glass Themes** |
+| Folder Icons | **icons8 SVG → Android VectorDrawable (aapt:attr inline gradients)** |
+| Analytics | **Custom AnalyticsManager (daemon thread, zero UI impact)** |
+
+---
+
+## 🎨 Design Resources
+
+### Icon Set (Light Theme)
+All folder icons use a pixel-perfect conversion of the **icons8 folder SVG** with 4 paths and inline `aapt:attr` gradients:
+
+| Path | Gradient |
+|---|---|
+| Back folder tab | `#00B5F0 → #008CC7` |
+| Back overlay | `0% → 15% black` |
+| Front folder body | `#00DCFF → #00BFFF → #00A8E0` |
+| Front overlay | `0% → 15% black` |
+
+### Drawable System
+The Liquid Glass light theme uses a layered drawable system:
+- `lg_bg_main.xml` — neutral `#ECEEF6` background
+- `lg_bg_glass_card.xml` — pure white `#FFFFFF` section cards with drop shadow
+- `lg_bg_item_row.xml` — near-transparent `#FAFBFF` row tiles with hairline border
 
 ---
 
@@ -296,6 +368,8 @@ Save  →  stream to temp file  →  atomic rename  →  index rebuild
 | `WRITE_EXTERNAL_STORAGE` | Edit and save files on Android ≤ 12 |
 | `MANAGE_EXTERNAL_STORAGE` | Full storage access on Android 13+ |
 | `REQUEST_INSTALL_PACKAGES` | Install APK files from the APK inspector |
+| `INTERNET` | Analytics reporting (zero UI impact) |
+| `ACCESS_NETWORK_STATE` | Connectivity pre-check before analytics HTTP calls |
 
 ---
 
@@ -303,8 +377,8 @@ Save  →  stream to temp file  →  atomic rename  →  index rebuild
 
 ```bash
 # Clone
-git clone https://github.com/Samanta2087/xyvion.git
-cd xyvion
+git clone https://github.com/Samanta2087/MT-Manger.git
+cd MT-Manger
 
 # Build debug APK
 ./gradlew assembleDebug
@@ -322,13 +396,20 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 
 | Setting | Value | Effect |
 |---|---|---|
+| `namespace` | `com.fyloxen.app` | |
 | `minSdk` | 26 (Android 8.0) | |
-| `targetSdk` | 34 (Android 14) | |
+| `compileSdk` | 35 (Android 15) | |
+| `targetSdk` | 35 (Android 15) | |
+| `versionName` | `1.0` | |
 | `isMinifyEnabled` (release) | ✅ `true` | R8 removes unused code |
 | `isShrinkResources` (release) | ✅ `true` | Strips unused res/ files |
 | `android.enableR8.fullMode` | ✅ `true` | Aggressive dead-code elimination |
 | ABI filters | `armeabi-v7a`, `arm64-v8a` | Excludes x86 native libs (~30% smaller) |
 | Java / Kotlin target | **17** | |
+| Resource configs | `en` only | Drops ~1 MB of unused locale strings |
+| BuildConfig | ❌ Disabled | Removes unused BuildConfig class |
+| ViewBinding | ✅ Enabled | Type-safe view access |
+| Bundle splits | language + density + abi | AAB serves only what the device needs |
 
 ---
 
@@ -341,6 +422,11 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 - [x] ✅ SQLite search index
 - [x] ✅ Breadcrumb path navigation strip
 - [x] ✅ Move-to folder browser dialog
+- [x] ✅ Smooth folder & file open/close animations
+- [x] ✅ Zero-UI-impact analytics with crash reporting
+- [x] ✅ icons8 pixel-perfect folder icon (VectorDrawable with inline gradients)
+- [x] ✅ Scroll position memory (back/forward navigation restores position)
+- [x] ✅ Prefetch + RecyclerView cache for smooth large-directory scrolling
 - [ ] Archive creation (ZIP, TAR)
 - [ ] Hex viewer for binary files
 - [ ] FTP / SFTP remote storage browsing
