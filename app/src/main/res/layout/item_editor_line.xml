@@ -36,7 +36,7 @@
         android:visibility="gone" />
 
     <!-- Editor line -->
-    <com.mtmanager.lite.ui.editor.SelectionEditText
+    <com.fyloxen.app.ui.editor.SelectionEditText
         android:id="@+id/etLine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

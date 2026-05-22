@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.MTManagerLite" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MTManagerLite" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/accent_blue</item>
         <item name="colorPrimaryVariant">@color/accent_blue_dim</item>
         <item name="colorOnPrimary">@color/text_on_accent</item>

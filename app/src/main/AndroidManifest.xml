@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Internet — required for Firebase Analytics & Crashlytics -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -16,7 +20,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MTManagerLite">
+        android:theme="@style/Theme.MTManagerLite"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
 
         <!-- ── Main launcher ── -->
         <activity
@@ -29,7 +35,7 @@
             </intent-filter>
 
             <!-- Locate its location (Open file manager at the file's parent path) -->
-            <intent-filter android:label="XYvion Locate file" android:icon="@mipmap/ic_launcher">
+            <intent-filter android:label="Fyloxen – Locate file" android:icon="@mipmap/ic_launcher">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <!-- Match all files with the file:// scheme -->
@@ -44,10 +50,10 @@
             android:name=".ui.editor.FileEditorActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"
-            android:label="XYvion – Editor">
+            android:label="Fyloxen – Editor">
 
             <!-- Open any plain text file -->
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -55,25 +61,25 @@
             </intent-filter>
 
             <!-- Specific code / script mimetypes -->
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/json" />
             </intent-filter>
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/xml" />
             </intent-filter>
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/javascript" />
             </intent-filter>
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -81,7 +87,7 @@
             </intent-filter>
 
             <!-- Open files by URI (file:// scheme) — any extension we handle -->
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -89,13 +95,13 @@
             </intent-filter>
 
             <!-- Content URI scheme (needed for most modern file managers) -->
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" android:mimeType="text/*" />
             </intent-filter>
-            <intent-filter android:label="Edit with XYvion">
+            <intent-filter android:label="Edit with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -107,9 +113,9 @@
         <activity
             android:name=".ui.viewer.ImageViewerActivity"
             android:exported="true"
-            android:label="XYvion – Viewer">
+            android:label="Fyloxen – Image Viewer">
 
-            <intent-filter android:label="View with XYvion">
+            <intent-filter android:label="View with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
@@ -120,16 +126,16 @@
         <activity
             android:name=".ui.viewer.VideoPlayerActivity"
             android:exported="true"
-            android:label="XYvion – Video"
+            android:label="Fyloxen – Video"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="fullSensor">
 
-            <intent-filter android:label="Play with XYvion">
+            <intent-filter android:label="Play with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="video/*" />
             </intent-filter>
-            <intent-filter android:label="Play with XYvion">
+            <intent-filter android:label="Play with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" android:mimeType="video/*" />
@@ -140,14 +146,14 @@
         <activity
             android:name=".ui.viewer.AudioPlayerActivity"
             android:exported="true"
-            android:label="XYvion – Audio">
+            android:label="Fyloxen – Audio">
 
-            <intent-filter android:label="Play with XYvion">
+            <intent-filter android:label="Play with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="audio/*" />
             </intent-filter>
-            <intent-filter android:label="Play with XYvion">
+            <intent-filter android:label="Play with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" android:mimeType="audio/*" />
@@ -158,22 +164,22 @@
         <activity
             android:name=".ui.viewer.PdfViewerActivity"
             android:exported="true"
-            android:label="XYvion – PDF Viewer">
+            android:label="Fyloxen – PDF Viewer">
 
             <!-- application/pdf — used by WhatsApp, Gmail, Drive, etc. -->
-            <intent-filter android:label="Open with XYvion PDF">
+            <intent-filter android:label="Open with Fyloxen PDF">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/pdf" />
             </intent-filter>
             <!-- content:// scheme (WhatsApp shares as content://) -->
-            <intent-filter android:label="Open with XYvion PDF">
+            <intent-filter android:label="Open with Fyloxen PDF">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" android:mimeType="application/pdf" />
             </intent-filter>
             <!-- file:// scheme -->
-            <intent-filter android:label="Open with XYvion PDF">
+            <intent-filter android:label="Open with Fyloxen PDF">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="file" android:mimeType="application/pdf" />
@@ -184,19 +190,19 @@
         <activity
             android:name=".ui.viewer.CsvViewerActivity"
             android:exported="true"
-            android:label="XYvion – Spreadsheet Viewer">
+            android:label="Fyloxen – Spreadsheet Viewer">
 
-            <intent-filter android:label="Open with XYvion">
+            <intent-filter android:label="Open with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/csv" />
             </intent-filter>
-            <intent-filter android:label="Open with XYvion">
+            <intent-filter android:label="Open with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/tab-separated-values" />
             </intent-filter>
-            <intent-filter android:label="Open with XYvion">
+            <intent-filter android:label="Open with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" android:mimeType="text/csv" />
@@ -207,22 +213,22 @@
         <activity
             android:name=".ui.viewer.DocxViewerActivity"
             android:exported="true"
-            android:label="XYvion – Document Viewer">
+            android:label="Fyloxen – Document Viewer">
 
             <!-- application/vnd.openxmlformats-officedocument.wordprocessingml.document -->
-            <intent-filter android:label="Open with XYvion">
+            <intent-filter android:label="Open with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
             </intent-filter>
             <!-- content:// scheme (WhatsApp, Gmail, Drive share) -->
-            <intent-filter android:label="Open with XYvion">
+            <intent-filter android:label="Open with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="content" android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
             </intent-filter>
             <!-- file:// scheme -->
-            <intent-filter android:label="Open with XYvion">
+            <intent-filter android:label="Open with Fyloxen">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="file" android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />

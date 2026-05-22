@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Premium sectioned bottom-sheet menu for Fyloxen Light Glass theme -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_sheet_surface"
+    android:orientation="vertical">
+
+    <!-- Handle pill -->
+    <View
+        android:layout_width="44dp"
+        android:layout_height="5dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="2dp"
+        android:background="#E0E4F0"
+        android:alpha="0.9" />
+
+    <!-- Header row: title + subtitle + close -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="22dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="10dp">
+
+        <!-- Titles column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSheetTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MENU"
+                android:textColor="@color/lg_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:letterSpacing="0.06"
+                android:textAllCaps="true" />
+
+            <TextView
+                android:id="@+id/tvSheetSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/lg_text_muted"
+                android:textSize="11.5sp"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
+        <!-- Close button -->
+        <ImageButton
+            android:id="@+id/btnSheetClose"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/lg_bg_header_btn"
+            android:src="@drawable/ic_close"
+            android:tint="@color/lg_text_secondary"
+            android:padding="10dp"
+            android:contentDescription="Close" />
+
+    </LinearLayout>
+
+    <!-- Accent underline -->
+    <View
+        android:layout_width="32dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_sheet_title_accent" />
+
+    <!-- ══════════════════════════════════════════════════════════
+         LIGHT THEME: Sectioned layout (section wrappers are
+         shown/hidden dynamically from MainActivity)
+         ══════════════════════════════════════════════════════════ -->
+
+    <!-- Section 1: File Options -->
+    <LinearLayout
+        android:id="@+id/sectionFileOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="File Options"
+            android:textColor="@color/lg_text_muted"
+            android:textSize="10.5sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.10"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="6dp" />
+
+        <LinearLayout
+            android:id="@+id/menuSectionFileOptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+    </LinearLayout>
+
+    <!-- Divider between sections (hidden by default) -->
+    <View
+        android:id="@+id/dividerBetweenSections"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="#18000060"
+        android:visibility="gone" />
+
+    <!-- Section 2: Actions -->
+    <LinearLayout
+        android:id="@+id/sectionActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actions"
+            android:textColor="@color/lg_text_muted"
+            android:textSize="10.5sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.10"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="6dp" />
+
+        <LinearLayout
+            android:id="@+id/menuSectionActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+    </LinearLayout>
+
+    <!-- Section 3: Utilities -->
+    <LinearLayout
+        android:id="@+id/sectionUtilities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Utilities"
+            android:textColor="@color/lg_text_muted"
+            android:textSize="10.5sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.10"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="6dp" />
+
+        <LinearLayout
+            android:id="@+id/menuSectionUtilities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+    </LinearLayout>
+
+    <!-- Section 4: Navigation -->
+    <LinearLayout
+        android:id="@+id/sectionNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Navigation"
+            android:textColor="@color/lg_text_muted"
+            android:textSize="10.5sp"
+            android:textAllCaps="true"
+            android:letterSpacing="0.10"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="6dp" />
+
+        <LinearLayout
+            android:id="@+id/menuSectionNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+
+    </LinearLayout>
+
+    <!-- ══════════════════════════════════════════════════════════
+         DARK THEME / simple fallback: flat single-column list
+         ══════════════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/menuItemsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp" />
+
+    <!-- Bottom spacing -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="24dp" />
+
+</LinearLayout>

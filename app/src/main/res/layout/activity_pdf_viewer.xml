@@ -5,7 +5,7 @@
     android:background="#1A1A1A">
 
     <!-- Full-screen zoomable page (no RecyclerView — direct touch) -->
-    <com.mtmanager.lite.ui.viewer.ZoomableImageView
+    <com.fyloxen.app.ui.viewer.ZoomableImageView
         android:id="@+id/ivPdfPage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

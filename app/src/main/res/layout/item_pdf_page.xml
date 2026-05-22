@@ -6,7 +6,7 @@
     android:background="@color/bg_primary">
 
     <!-- Zoomable page — pinch to zoom, double-tap to reset -->
-    <com.mtmanager.lite.ui.viewer.ZoomableImageView
+    <com.fyloxen.app.ui.viewer.ZoomableImageView
         android:id="@+id/ivPdfPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

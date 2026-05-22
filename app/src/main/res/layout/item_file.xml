@@ -5,24 +5,26 @@
     android:layout_height="wrap_content"
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
-    android:paddingTop="3dp"
-    android:paddingBottom="3dp">
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp">
+
 
     <!-- Inner card: gets glass bg in light, transparent in dark -->
     <LinearLayout
         android:id="@+id/itemRowCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="64dp"
+        android:minHeight="68dp"
         android:orientation="vertical"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:background="?attr/xyvionBgItemRow"
         android:foreground="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true">
+
 
         <!-- Main row: icon + info + chevron -->
         <LinearLayout
@@ -45,14 +47,14 @@
             <!-- File Type Icon -->
             <FrameLayout
                 android:id="@+id/iconContainer"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_marginEnd="8dp">
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="10dp">
 
                 <ImageView
                     android:id="@+id/ivFileIcon"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_file_flat"
                     android:scaleType="centerInside" />
@@ -141,8 +143,8 @@
             <!-- Chevron arrow (visible for folders in light theme) -->
             <FrameLayout
                 android:id="@+id/chevronContainer"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="?attr/xyvionBgChevron"
                 android:visibility="gone">
 
@@ -158,45 +160,5 @@
 
         </LinearLayout>
 
-        <!-- Folder occupancy progress bar (visible only for folders) -->
-        <LinearLayout
-            android:id="@+id/occupancyContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="6dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:visibility="gone">
-
-            <!-- Thin progress bar track -->
-            <FrameLayout
-                android:layout_width="0dp"
-                android:layout_height="3dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_occupancy_track">
-
-                <View
-                    android:id="@+id/occupancyFill"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_occupancy_fill"
-                    android:layout_gravity="start|center_vertical" />
-
-            </FrameLayout>
-
-            <!-- Occupancy percentage label -->
-            <TextView
-                android:id="@+id/tvOccupancyPct"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textSize="9sp"
-                android:textColor="?attr/xyvionTextMuted"
-                android:textStyle="bold" />
-
         </LinearLayout>
-
-    </LinearLayout>
 </FrameLayout>

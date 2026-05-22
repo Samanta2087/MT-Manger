@@ -1,8 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- Solid white card matching HTML reference: #ffffff, 24dp radius, subtle shadow border -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="#FFFFFFFF" />
-    <corners android:radius="24dp" />
-    <stroke android:width="1dp" android:color="#0F000020" />
-</shape>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Clean white card — pops against the neutral grey background without any tint blur -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Single subtle drop shadow — not a glow, just depth -->
+    <item android:top="2dp" android:left="1dp" android:right="1dp" android:bottom="-2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#0D000040" />
+            <corners android:radius="24dp" />
+        </shape>
+    </item>
+    <!-- Pure white surface — high contrast against #ECEEF6 background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF" />
+            <corners android:radius="22dp" />
+            <stroke android:width="0.5dp" android:color="#14000040" />
+        </shape>
+    </item>
+</layer-list>
